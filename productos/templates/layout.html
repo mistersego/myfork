@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    {% load static %}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,12 +21,12 @@
     <!-- Standard iPhone Touch Icon-->
     <link rel="apple-touch-icon" sizes="57x57" href="http://placehold.it/57.png/000/fff">
     <!-- Common -->
-    <link href="static/assets/css/lib/font-awesome.min.css" rel="stylesheet">
-    <link href="static/assets/css/lib/themify-icons.css" rel="stylesheet">
-    <link href="static/assets/css/lib/menubar/sidebar.css" rel="stylesheet">
-    <link href="static/assets/css/lib/bootstrap.min.css" rel="stylesheet">
-    <link href="static/assets/css/lib/helper.css" rel="stylesheet">
-    <link href="static/assets/css/style.css" rel="stylesheet">
+    <link href="{% static 'assets/css/lib/font-awesome.min.css' %} " rel="stylesheet">
+    <link href="{% static 'assets/css/lib/themify-icons.css' %} " rel="stylesheet">
+    <link href="{% static 'assets/css/lib/menubar/sidebar.css' %} " rel="stylesheet">
+    <link href="{% static 'assets/css/lib/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/lib/helper.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
 		<script src="https://kit.fontawesome.com/5b7fab29bb.js" crossorigin="anonymous"></script>
 
 		<link rel="stylesheet" href="//cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
@@ -265,12 +266,12 @@
     </div>
 
 		<!-- Common -->
-		<script src="static/assets/js/lib/jquery.min.js"></script>
-		<script src="static/assets/js/lib/jquery.nanoscroller.min.js"></script>
-		<script src="static/assets/js/lib/menubar/sidebar.js"></script>
-		<script src="static/assets/js/lib/preloader/pace.min.js"></script>
-		<script src="static/assets/js/lib/bootstrap.min.js"></script>
-		<script src="static/assets/js/scripts.js"></script>
+		<script src="{% static 'assets/js/lib/jquery.min.js' %}"></script>
+		<script src="{% static 'assets/js/lib/jquery.nanoscroller.min.js' %} "></script>
+		<script src="{% static 'assets/js/lib/menubar/sidebar.js' %}"></script>
+		<script src="{% static 'assets/js/lib/preloader/pace.min.js' %}"></script>
+		<script src="{% static 'assets/js/lib/bootstrap.min.js' %} "></script>
+		<script src="{% static 'assets/js/scripts.js' %}"></script>
 		<!--  Dashboard 1 -->
 
 		<script type="text/javascript" src="//cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
