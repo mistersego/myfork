@@ -73,13 +73,13 @@
                     <th scope="row">1</th>
                     <td>{{categoria.Nombre}}</td>
                     <td>{{categoria.Codigo}}</td>
-                    {%if categoria.Habilitada == true%}
-                    <td class="text-center"><i class="fas fa-check text-success"></i></td>
+                    {%if categoria.Habilitada == 1 %}
+                    <td class="text-center"> <a href="{% url 'categoria-habilitado' id=categoria.Id_CategoriaProd %}"><i class="fas fa-check text-success"></i></a>   </td>
                     {% else %}
-                    <td class="text-center"><i class="fas fa-times text-danger"></i></td>
+                    <td class="text-center"> <a href="{% url 'categoria-habilitado' id=categoria.Id_CategoriaProd %}"><i class="fas fa-times text-danger"></i></a> </td>
                     {% endif %}
 
-                    <td class="text-center"><a href="#" class="btn btn-warning"><i class="fas fa-edit"></i></a> </td>
+                    <td class="text-center"><a href="{% url 'categoria' id=categoria.Id_CategoriaProd %}" class="btn btn-warning"><i class="fas fa-edit"></i></a> </td>
                     <td class="text-center"><a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
                   </tr>
                   {% endfor %}
