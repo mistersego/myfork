@@ -3,19 +3,31 @@
 {% block content %}
 
     <div class="row">
-     <div class="col-md-6">
-       <form class="" action="index.html" method="post">
-         <div class="row">
-           <div class="col-md-12">
-             <label>Codigo</label>
-             <input required type="text" name="codigo" class="form-control" value="">
-           </div>
-           <div class="col-md-12">
-             <label>Nombre categoria</label>
-             <input required type="text" name="nombre" class="form-control" value="">
-           </div>
-         </div>
-       </form>
+     <div class="col-md-12">
+
+       <div class="card">
+        <div class="card-header " >
+          <h6> <strong>Editar la categoria: {{categoria}}</strong></h6>
+        </div>
+        <div class="card-body">
+          <form class="" action="index.html" method="post">
+            <div class="row">
+              <div class="col-md-12">
+                <label>Codigo</label>
+                <input required type="text" name="codigo" class="form-control" value="{{categoria.Codigo}}">
+              </div>
+              <div class="col-md-12">
+                <label>Nombre categoria</label>
+                <input required type="text" name="nombre" class="form-control" value="{{categoria.Nombre}}">
+              </div>
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-primary" name="button"> <i class="fas fa-save"></i></button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
      </div>
      </div>
 {% endblock %}
