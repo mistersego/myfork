@@ -1,0 +1,9 @@
+//instalaciones
+1-clonar proyecto git
+2-pip install virtualenv (instalar entorno virual) 
+3-environment\Scripts\activate (activar entorno)
+4- py -m pip install Django (instalar django)
+
+//requerimientos
+pip install python-decouple
+pip install mysqlclient
