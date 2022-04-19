@@ -80,7 +80,7 @@
                     {% endif %}
 
                     <td class="text-center"><a href="{% url 'categoria' id=categoria.Id_CategoriaProd %}" class="btn btn-warning"><i class="fas fa-edit"></i></a> </td>
-                    <td class="text-center"><a href="#" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
+                    <td class="text-center"><a href="{% url 'categorias-eliminar' id=categoria.Id_CategoriaProd %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
                   </tr>
                   {% endfor %}
                 </tbody>
