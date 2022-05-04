@@ -31,7 +31,7 @@ def editarRubroEmpresa(request):
     #variables de request
     rubro=RubroEmpresa.objects.get(pk=idGet)
 
-    rubro.rub=nombreGet
+    rubro.rubro=nombreGet
     rubro.save()
     messages.success(request, 'Rubro actualizado correctamente', extra_tags='success')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

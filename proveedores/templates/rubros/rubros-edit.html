@@ -10,7 +10,7 @@
               <div class="page-title">
                   <ol class="breadcrumb">
                       <li class="breadcrumb-item">
-                          <a href="{% url 'rubros' %}">Categorias</a>
+                          <a href="{% url 'rubros' %}">Rubros de empresas</a>
                       </li>
                       <li class="breadcrumb-item active">Editar rubro</li>
                   </ol>
@@ -28,7 +28,7 @@
           <h6> <strong>Editar el rubro: {{rubro.rubro}}</strong></h6>
         </div>
         <div class="card-body">
-          <form class="" action="{% url 'categorias-editar' %}" method="get">
+          <form class="" action="{% url 'rubros-empresa-editar' %}" method="get">
             <div class="row">
               <div class="col-md-12">
                 <label>Nombre del rubro</label>

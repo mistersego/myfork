@@ -89,7 +89,7 @@
                 <tbody>
                   {% for categoria in categorias %}
                   <tr>
-                    <th scope="row">1</th>
+                    <th scope="row">{{forloop.counter}}</th>
                     <td>{{categoria.nombre}}</td>
                     <td>{{categoria.codigo}}</td>
                     {%if categoria.habilitada == 1 %}

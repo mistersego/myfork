@@ -82,9 +82,9 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {% for rubro in rubros %}
+                  {% for rubro in rubros %} 
                   <tr>
-                    <th scope="row">1</th>
+                    <th scope="row">{{forloop.counter}}</th>
                     <td>{{rubro.rubro}}</td>
                     <td class="text-center"><a href="{% url 'rubro' id=rubro.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a> </td>
                     <td class="text-center"><a href="{% url 'rubros-empresa-eliminar' id=rubro.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
