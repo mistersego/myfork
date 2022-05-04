@@ -291,7 +291,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('n8n898zmv8sgjaxtwb4h4rifoed1y519','e30:1nlumE:1WLm3-iFJGgtIUdmCl1cTi8oKkmK_uPf8WCNuMBzUTM','2022-05-17 15:49:26.394246');
+INSERT INTO `django_session` VALUES ('n8n898zmv8sgjaxtwb4h4rifoed1y519','e30:1nm3K9:MqPwQs7k2tjbjvt2gf_8Gz_yJHGkEFa88PJnbcoIRYQ','2022-05-18 00:57:01.293643');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -362,6 +362,7 @@ CREATE TABLE `pro_producto` (
   `descripcion` text DEFAULT NULL,
   `garantia` varchar(200) DEFAULT NULL,
   `url_imagen_producto` text DEFAULT NULL,
+  `nombre` varchar(200) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -374,6 +375,171 @@ LOCK TABLES `pro_producto` WRITE;
 /*!40000 ALTER TABLE `pro_producto` DISABLE KEYS */;
 /*!40000 ALTER TABLE `pro_producto` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `prove_personal`
+--
+
+DROP TABLE IF EXISTS `prove_personal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prove_personal` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(200) NOT NULL,
+  `tipo_personal` varchar(20) NOT NULL,
+  `proveedor_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `prove_personal`
+--
+
+LOCK TABLES `prove_personal` WRITE;
+/*!40000 ALTER TABLE `prove_personal` DISABLE KEYS */;
+/*!40000 ALTER TABLE `prove_personal` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `prove_personal_clave`
+--
+
+DROP TABLE IF EXISTS `prove_personal_clave`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prove_personal_clave` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(300) NOT NULL,
+  `cargo` varchar(200) NOT NULL,
+  `firma` varchar(200) DEFAULT NULL,
+  `proveedor_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `prove_personal_clave`
+--
+
+LOCK TABLES `prove_personal_clave` WRITE;
+/*!40000 ALTER TABLE `prove_personal_clave` DISABLE KEYS */;
+/*!40000 ALTER TABLE `prove_personal_clave` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `prove_proveedor`
+--
+
+DROP TABLE IF EXISTS `prove_proveedor`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prove_proveedor` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `proveedor` varchar(200) NOT NULL,
+  `compania` varchar(200) NOT NULL,
+  `representante_legal` varchar(200) NOT NULL,
+  `direccion_organizacion` varchar(300) DEFAULT NULL,
+  `telefono` varchar(100) DEFAULT NULL,
+  `fax` varchar(100) DEFAULT NULL,
+  `movil` varchar(100) DEFAULT NULL,
+  `correo` varchar(100) DEFAULT NULL,
+  `website` varchar(100) DEFAULT NULL,
+  `tipo_organizacion_id` int(11) NOT NULL,
+  `nit` varchar(100) NOT NULL,
+  `nrc` varchar(100) DEFAULT NULL,
+  `periodo_negocio` int(11) NOT NULL,
+  `rubro_empresa_id` int(11) NOT NULL,
+  `estado` int(11) NOT NULL,
+  `url_copia_autenticada` varchar(200) NOT NULL,
+  `razon_social` varchar(200) DEFAULT NULL,
+  `calificacion` varchar(2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `prove_proveedor`
+--
+
+LOCK TABLES `prove_proveedor` WRITE;
+/*!40000 ALTER TABLE `prove_proveedor` DISABLE KEYS */;
+/*!40000 ALTER TABLE `prove_proveedor` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `prove_referencia`
+--
+
+DROP TABLE IF EXISTS `prove_referencia`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prove_referencia` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre_referencia` varchar(200) NOT NULL,
+  `tipo_referencia` varchar(50) NOT NULL,
+  `nombre_contacto` varchar(200) NOT NULL,
+  `telefono_contacto` varchar(20) NOT NULL,
+  `proveedor_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `prove_referencia`
+--
+
+LOCK TABLES `prove_referencia` WRITE;
+/*!40000 ALTER TABLE `prove_referencia` DISABLE KEYS */;
+/*!40000 ALTER TABLE `prove_referencia` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `prove_rubro_empresa`
+--
+
+DROP TABLE IF EXISTS `prove_rubro_empresa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prove_rubro_empresa` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `rubro` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `prove_rubro_empresa`
+--
+
+LOCK TABLES `prove_rubro_empresa` WRITE;
+/*!40000 ALTER TABLE `prove_rubro_empresa` DISABLE KEYS */;
+INSERT INTO `prove_rubro_empresa` VALUES (2,'4'),(4,'dembo');
+/*!40000 ALTER TABLE `prove_rubro_empresa` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `prove_tipo_organizacion`
+--
+
+DROP TABLE IF EXISTS `prove_tipo_organizacion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prove_tipo_organizacion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tipo` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `prove_tipo_organizacion`
+--
+
+LOCK TABLES `prove_tipo_organizacion` WRITE;
+/*!40000 ALTER TABLE `prove_tipo_organizacion` DISABLE KEYS */;
+/*!40000 ALTER TABLE `prove_tipo_organizacion` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -384,4 +550,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-03 10:41:03
+-- Dump completed on 2022-05-04  8:10:45
