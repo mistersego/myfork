@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import CategoriaProducto
+from .models import Producto
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
@@ -8,7 +9,15 @@ from django.urls import reverse
 # Create your views here.
 
 def productos(request):
-    return render(request,'productos/productos.html')
+    productos=Producto.objects.all()
+    context ={'productos':productos}
+    return render(request,'productos/productos.html', context)
+
+
+
+
+
+#----------------------CATEGORIAS--------------------------------
 
 def categoriasProductos(request):
     categorias=CategoriaProducto.objects.all()
@@ -76,3 +85,5 @@ def guardarCategoria( request):
         categoria.save()
         messages.success(request, 'categoria de producto agregada correctamente', extra_tags='success')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+#----------------------CATEGORIAS--------------------------------
