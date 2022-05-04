@@ -38,6 +38,7 @@ def eliminarCategoria(request, id):
     messages.success(request, 'categoria de producto eliminada correctamente', extra_tags='danger')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
 def editarCategoria(request):
     #variables de request
     codigoGet =request.GET["codigo"]

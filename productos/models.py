@@ -9,7 +9,7 @@ class CategoriaProducto(models.Model):
     habilitada = models.BooleanField()
 
     def __str__(self):
-        return self.Nombre
+        return self.nombre
 
     class Meta:
         db_table = "pro_categoria_producto"
