@@ -15,8 +15,8 @@ def productos(request):
 
 
 
-
-
+/ .-
+1
 #----------------------CATEGORIAS--------------------------------
 
 def categoriasProductos(request):
@@ -49,7 +49,7 @@ def eliminarCategoria(request, id):
 
 
 def editarCategoria(request):
-    #variables de request
+      #variables de request
     codigoGet =request.GET["codigo"]
     nombreGet =request.GET["nombre"]
     idGet=request.GET["id"]
