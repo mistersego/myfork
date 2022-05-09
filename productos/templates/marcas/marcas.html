@@ -1,0 +1,160 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+  <div class="row">
+    <!-- /# column -->
+    <div class="col-lg-12 p-l-0 title-margin-left">
+        <div class="page-header">
+            <div class="page-title">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">Marcas</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <!-- /# column -->
+  </div>
+
+  <div class="row">
+    <div class="col-md-12 ">
+      <!-- Button trigger modal -->
+      <div class="text-right">
+        <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#exampleModal">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+      <!-- Modal -->
+      <form class="" action="{% url 'guardar_marca' %}" method="post">
+      {% csrf_token %}
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Agregar marca</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <div class="row">                
+                    <div class="col-md-12">
+                      <label>Nombre de marca</label>
+                      <input required type="text" name="marca" class="form-control" value="">
+                    </div>
+                    <div class="col-md-12">
+                      <label>Descripción</label>
+                      <input required type="text" name="descripcion" id="" class="form-control" >
+                    </div>
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Salir</button>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="row">
+  {% include "message.html"  %}
+    <div class="col-md-12">
+      <div class="card">
+          <div class="">
+            <h5 class="card-title mb-4"><strong>Marcas</strong></h5>
+          </div>
+          <div class="card-body">
+            <table class="table" id="myTable">
+              <thead>
+                <tr>
+                  <th width="20" scope="col">#</th>
+                  <th  scope="col">Nombre</th>
+                  <th  scope="col">Descripción</th>
+                  <th  scope="col">Productos</th>
+                  <th class="text-center" width="60">Editar</th>
+                  <th class="text-center" width="60">Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for marca in marcas %} 
+                <tr>
+                  <th scope="row">{{forloop.counter}}</th>
+                  <td>{{marca.marca}}</td>
+                  <td>{{marca.descripcion}}</td>
+                  <td>{{marca.conteo}}</td>                  
+                  <td class="text-center"><button type="button" id="editButton{{marca.id}}}" class="btn btn-warning" onclick="show_modal('{{marca.id}}')"><i class="fas fa-edit"></i></button> </td>
+                  <td class="text-center"><a href="{% url 'eliminar_marca' id=marca.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
+                </tr>            
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <form method="post" action="{% url 'actualizar_marca' %}">
+          {% csrf_token %}
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Editar marca</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <div class="row">                
+                <input type="text" name="id" id="id" hidden>
+                <div class="col-md-12">
+                  <label>Nombre de marca</label>
+                  <input required type="text" name="marca" id="marca" class="form-control">
+                </div>
+                <div class="col-md-12">
+                  <label>Descripción</label>
+                  <input required type="text" name="descripcion" id="descripcion" class="form-control" >
+                </div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Salir</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  {% block javascript %}
+    <script>
+      function show_modal (id) {              
+              url = "{% url 'actualizar_marca_datos' id=0 %}".replace('0',id);
+              $.ajax({
+                url: url,
+                type: 'get',
+                dataType: 'json',
+                beforeSend: function () {
+                  $("#EditModal").modal("show");
+                },
+                success: function (response) {                                 
+                  gotten_response = JSON.parse(JSON.stringify(response));                  
+                  $("#EditModal .modal-content .modal-body #id").attr('value',gotten_response['id']);
+                  $("#EditModal .modal-content .modal-body #marca").attr('value',gotten_response['marca']);
+                  $("#EditModal .modal-content .modal-body #descripcion").attr('value',gotten_response['descripcion']);
+                }
+              });
+            };
+      
+        
+    </script>
+{% endblock javascript %}
+
+{% endblock %}
