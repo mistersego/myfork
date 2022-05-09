@@ -365,6 +365,7 @@ CREATE TABLE `pro_producto` (
   `url_imagen_producto` text DEFAULT NULL,
   `nombre` varchar(200) NOT NULL,
   `categoria_id` int(11) NOT NULL,
+  `proveedor_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -375,8 +376,34 @@ CREATE TABLE `pro_producto` (
 
 LOCK TABLES `pro_producto` WRITE;
 /*!40000 ALTER TABLE `pro_producto` DISABLE KEYS */;
-INSERT INTO `pro_producto` VALUES (1,2,45,'x','x','x','x','x','x','x',0);
+INSERT INTO `pro_producto` VALUES (1,2,45,'x','x','x','x','x','x','x',0,0);
 /*!40000 ALTER TABLE `pro_producto` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `prove_evaluacion`
+--
+
+DROP TABLE IF EXISTS `prove_evaluacion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prove_evaluacion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `producto_id` int(11) NOT NULL,
+  `proveedor_id` int(11) NOT NULL,
+  `rubro_evaluacion_id` int(11) NOT NULL,
+  `evaluacion` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `prove_evaluacion`
+--
+
+LOCK TABLES `prove_evaluacion` WRITE;
+/*!40000 ALTER TABLE `prove_evaluacion` DISABLE KEYS */;
+/*!40000 ALTER TABLE `prove_evaluacion` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -456,7 +483,7 @@ CREATE TABLE `prove_proveedor` (
   `estado` int(11) NOT NULL,
   `url_copia_autenticada` varchar(200) NOT NULL,
   `razon_social` varchar(200) DEFAULT NULL,
-  `calificacion` varchar(2) DEFAULT NULL,
+  `calificacion` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -522,6 +549,30 @@ INSERT INTO `prove_rubro_empresa` VALUES (2,'4'),(4,'dembo');
 UNLOCK TABLES;
 
 --
+-- Table structure for table `prove_rubro_evaluacion`
+--
+
+DROP TABLE IF EXISTS `prove_rubro_evaluacion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prove_rubro_evaluacion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `rubro` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `prove_rubro_evaluacion`
+--
+
+LOCK TABLES `prove_rubro_evaluacion` WRITE;
+/*!40000 ALTER TABLE `prove_rubro_evaluacion` DISABLE KEYS */;
+INSERT INTO `prove_rubro_evaluacion` VALUES (1,'nivel de servicio postventa'),(2,'periodos de garantíaç'),(3,'imagen del producto'),(4,'proveedor en el mercado'),(5,'localización'),(6,'existencia de servicios de atención al cliente'),(7,'instalaciones'),(8,' fuerza técnica'),(9,'capacidad financiera'),(10,'nivel organizativo');
+/*!40000 ALTER TABLE `prove_rubro_evaluacion` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `prove_tipo_organizacion`
 --
 
@@ -554,4 +605,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-09  8:24:28
+-- Dump completed on 2022-05-09  8:56:46
