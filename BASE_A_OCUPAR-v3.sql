@@ -291,7 +291,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('n8n898zmv8sgjaxtwb4h4rifoed1y519','e30:1nm3K9:MqPwQs7k2tjbjvt2gf_8Gz_yJHGkEFa88PJnbcoIRYQ','2022-05-18 00:57:01.293643');
+INSERT INTO `django_session` VALUES ('n8n898zmv8sgjaxtwb4h4rifoed1y519','e30:1nnqyP:DDhsXbbBm-9gSQlULNHXivnmjRKISs95jMH35zkm9Hs','2022-05-23 00:10:01.955807');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -333,7 +333,7 @@ CREATE TABLE `pro_marca` (
   `marca` varchar(200) NOT NULL,
   `descripcion` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -342,6 +342,7 @@ CREATE TABLE `pro_marca` (
 
 LOCK TABLES `pro_marca` WRITE;
 /*!40000 ALTER TABLE `pro_marca` DISABLE KEYS */;
+INSERT INTO `pro_marca` VALUES (2,'x','x');
 /*!40000 ALTER TABLE `pro_marca` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -363,8 +364,9 @@ CREATE TABLE `pro_producto` (
   `garantia` varchar(200) DEFAULT NULL,
   `url_imagen_producto` text DEFAULT NULL,
   `nombre` varchar(200) NOT NULL,
+  `categoria_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -373,6 +375,7 @@ CREATE TABLE `pro_producto` (
 
 LOCK TABLES `pro_producto` WRITE;
 /*!40000 ALTER TABLE `pro_producto` DISABLE KEYS */;
+INSERT INTO `pro_producto` VALUES (1,2,45,'x','x','x','x','x','x','x',0);
 /*!40000 ALTER TABLE `pro_producto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -529,7 +532,7 @@ CREATE TABLE `prove_tipo_organizacion` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tipo` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -538,6 +541,7 @@ CREATE TABLE `prove_tipo_organizacion` (
 
 LOCK TABLES `prove_tipo_organizacion` WRITE;
 /*!40000 ALTER TABLE `prove_tipo_organizacion` DISABLE KEYS */;
+INSERT INTO `prove_tipo_organizacion` VALUES (1,'Corporativa'),(2,'Sociedad'),(3,'Persona Natural');
 /*!40000 ALTER TABLE `prove_tipo_organizacion` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -550,4 +554,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-04  8:10:45
+-- Dump completed on 2022-05-09  8:24:28
