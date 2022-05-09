@@ -13,13 +13,12 @@ from django.shortcuts import get_object_or_404, render
 
 def productos(request):
     productos=Producto.objects.all()
-    context ={'productos':productos}
+    marcas=Marca.objects.all()
+    categorias=CategoriaProducto.objects.all()
+    context ={'productos':productos , 'categorias': categorias , 'marcas': marcas   }
     return render(request,'productos/productos.html', context)
 
 
-
-/ .-
-1
 #----------------------CATEGORIAS--------------------------------
 
 def categoriasProductos(request):

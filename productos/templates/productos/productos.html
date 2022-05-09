@@ -49,7 +49,60 @@
                      <label>Nombre del producto</label>
                      <input required type="text" name="nombre" class="form-control" value="">
                    </div>
+
+                   <div class="col-md-12">
+                    <label>Marca</label>
+                    <select name="marca" class="form-control" id="">
+                      {% for marca in marcas %} 
+                        <option value="{{marca.id}}">{{marca.marca}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="col-md-12">
+                    <label>Categoria</label>
+                    <select name="categoria" class="form-control" id="">
+                       {% for categoria in categorias %} 
+                         <option value="{{categoria.id}}">{{categoria.nombre}}</option>
+                       {% endfor %}
+                    </select>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label>Precio</label>
+                    <input required type="number" name="precio" step="0.01" class="form-control">
+                  </div>
+
+                  <div class="col-md-6">
+                    <label>Color</label>
+                    <input required name="color"  type="text"  class="form-control">
+                  </div>
+
+                  <div class="col-md-12">
+                    <label>Caracteristica</label>
+                    <textarea name="caracteristica" class="form-control"  cols="30" rows="10"></textarea>
+                  </div>
+
+                  <div class="col-md-12">
+                    <label>Descripción</label>
+                    <textarea name="caracteristica" class="form-control"  cols="30" rows="10"></textarea>
+                  </div>
+
+                  <div class="col-md-12">
+                    <label>Utilidad</label>
+                    <textarea name="utilidad" class="form-control"  cols="30" rows="10"></textarea>
+                  </div>
+
+                  <div class="col-md-12">
+                    <label>Garantia</label>
+                    <input required type="text" name="garantia" class="form-control" value="">
+                  </div>
                  </div>
+
+                 <div class="col-md-12">
+                  <label>Imagen</label>
+                  <input required type="file" name="file" class="form-control" value="">
+                </div>
 
              </div>
              <div class="modal-footer">
