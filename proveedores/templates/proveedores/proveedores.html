@@ -1,0 +1,120 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<nav>
+  <div class="row">
+    <!-- /# column -->
+    <div class="col-lg-12 p-l-0 ">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="/">Home</a>
+        </li>                  
+        <li class="breadcrumb-item active"  aria-current="page">Proveedores</li>                    
+      </ol>
+    </div>
+</nav>
+{% include "message.html"  %}
+  <div class="row">
+    <div class="col-md-12 ">
+      <!-- Button trigger modal -->
+      <div class="text-right">
+        <a href="{% url 'create_proveedor' %}" class="btn btn-primary "> <i class="fas fa-plus"></i></a>
+      </div>         
+    </div>
+  </div>
+
+  <div class="row">  
+    <div class="col-md-12">
+      <div class="card">
+          <div class="">
+            <h5 class="card-title mb-4"><strong>Proveedores</strong></h5>
+          </div>
+          <div class="card-body">
+            {% comment %}
+              <div>
+              Columnas: <a class="toggle-vis" data-column="1">Proveedor</a> - <a class="toggle-vis" data-column="2">Compañía</a> 
+            </div>
+            {% endcomment %}
+            <table id="table" class="table" width="100%" id="myTable">
+              <thead>
+                <tr>
+                  <th width="20" scope="col">#</th>
+                  <th  scope="col">Proveedor</th>
+                  <th  scope="col">Compañía</th>
+                  <th  scope="col">Representante Legal</th>
+                  <th  scope="col">Dirección</th>
+                  <th  scope="col">Teléfono</th>
+                  <th  scope="col">Fax</th>
+                  <th  scope="col">Móvil</th>
+                  <th  scope="col">Correo Electrónico</th>
+                  <th  scope="col">Sitio Web</th>
+                  <th  scope="col">Tipo Organización</th>
+                  <th  scope="col">NIT</th>
+                  <th  scope="col">NRC</th>
+                  <th  scope="col">Periodo Negocio</th>
+                  <th  scope="col">Rubro Empresa</th>
+                  <th  scope="col">Estado</th>
+                  <th  scope="col">Copia Autenticada</th>
+                  <th  scope="col">Razón Social</th>
+                  <th  scope="col">Calificación</th>
+                  <th class="text-center" width="60">Editar</th>
+                  <th class="text-center" width="60">Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for proveedor in proveedores %} 
+                <tr>
+                  <th scope="row">{{forloop.counter}}</th>
+                  <td>{{proveedor.proveedor}}</td>
+                  <td>{{proveedor.compania}}</td>
+                  <td>{{proveedor.representante_legal}}</td> 
+                  <td>{{proveedor.direccion_organizacion}}</td>
+                  <td>{{proveedor.telefono}}</td>
+                  <td>{{proveedor.fax}}</td>
+                  <td>{{proveedor.movil}}</td>
+                  <td>{{proveedor.correo}}</td>
+                  <td>{{proveedor.website}}</td>
+                  <td>{{proveedor.tipo}}</td>
+                  <td>{{proveedor.nit}}</td>
+                  <td>{{proveedor.nrc}}</td>
+                  <td>{{proveedor.periodo_negocio}}</td>
+                  <td>{{proveedor.rubro}}</td>
+                  <td>{{proveedor.estado}}</td>
+                  <td><a href="{{proveedor.url_copia_autenticada.url}}" target="_blank" class="btn btn-info"> <i class="fas fa-eye"></i></a></td>
+                  <td>{{proveedor.razon_social}}</td>
+                  <td>{{proveedor.calificacion}}</td>
+                  <td class="text-center"><a href="{% url 'update_proveedor' id=proveedor.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a> </td>              
+                  <td class="text-center"><a href="{% url 'eliminar_proveedor' id=proveedor.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
+                </tr>            
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+  </div>
+    
+    {% block javascript %}
+        <script>
+            $(document).ready(function() {
+                  var table = $('#table').DataTable( {
+                      "scrollY": "300px",
+                      "scrollX": true,
+                      "paging": false
+                  } );
+              
+                  $('a.toggle-vis').on( 'click', function (e) {
+                      e.preventDefault();
+              
+                      // Get the column API object
+                      var column = table.column( $(this).attr('data-column') );
+              
+                      // Toggle the visibility
+                      column.visible( ! column.visible() );
+                  } );
+              } );  
+        </script>
+    {% endblock javascript %}   
+
+{% endblock %}
