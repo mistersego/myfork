@@ -1,6 +1,6 @@
 -- MySQL dump 10.19  Distrib 10.3.34-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: compras2
+-- Host: localhost    Database: compras3
 -- ------------------------------------------------------
 -- Server version	10.3.34-MariaDB-0ubuntu0.20.04.1
 
@@ -196,7 +196,7 @@ CREATE TABLE `django_admin_log` (
   `action_time` datetime(6) NOT NULL,
   `object_id` longtext DEFAULT NULL,
   `object_repr` varchar(200) NOT NULL,
-  `action_flag` smallint(5) unsigned NOT NULL CHECK (`action_flag` >= 0),
+  `action_flag` smallint(5) unsigned NOT NULL,
   `change_message` longtext NOT NULL,
   `content_type_id` int(11) DEFAULT NULL,
   `user_id` int(11) NOT NULL,
@@ -365,8 +365,14 @@ CREATE TABLE `pro_producto` (
   `url_imagen_producto` text DEFAULT NULL,
   `nombre` varchar(200) NOT NULL,
   `categoria_id` int(11) NOT NULL,
-  `proveedor_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  `proveedor_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `marca_id` (`marca_id`),
+  KEY `categoria_id` (`categoria_id`),
+  KEY `proveedor_id` (`proveedor_id`),
+  CONSTRAINT `pro_producto_ibfk_1` FOREIGN KEY (`marca_id`) REFERENCES `pro_marca` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `pro_producto_ibfk_2` FOREIGN KEY (`categoria_id`) REFERENCES `pro_categoria_producto` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `pro_producto_ibfk_3` FOREIGN KEY (`proveedor_id`) REFERENCES `prove_proveedor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -376,7 +382,7 @@ CREATE TABLE `pro_producto` (
 
 LOCK TABLES `pro_producto` WRITE;
 /*!40000 ALTER TABLE `pro_producto` DISABLE KEYS */;
-INSERT INTO `pro_producto` VALUES (1,2,45,'x','x','x','x','x','x','x',0,0);
+INSERT INTO `pro_producto` VALUES (1,2,45,'x','x','x','x','x','x','x',1,NULL);
 /*!40000 ALTER TABLE `pro_producto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -393,7 +399,13 @@ CREATE TABLE `prove_evaluacion` (
   `proveedor_id` int(11) NOT NULL,
   `rubro_evaluacion_id` int(11) NOT NULL,
   `evaluacion` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `rubro_evaluacion_id` (`rubro_evaluacion_id`),
+  KEY `producto_id` (`producto_id`),
+  KEY `proveedor_id` (`proveedor_id`),
+  CONSTRAINT `prove_evaluacion_ibfk_1` FOREIGN KEY (`producto_id`) REFERENCES `pro_producto` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `prove_evaluacion_ibfk_2` FOREIGN KEY (`proveedor_id`) REFERENCES `prove_proveedor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `prove_evaluacion_ibfk_3` FOREIGN KEY (`rubro_evaluacion_id`) REFERENCES `prove_rubro_evaluacion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -418,7 +430,9 @@ CREATE TABLE `prove_personal` (
   `nombre` varchar(200) NOT NULL,
   `tipo_personal` varchar(20) NOT NULL,
   `proveedor_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `proveedor_id` (`proveedor_id`),
+  CONSTRAINT `prove_personal_ibfk_1` FOREIGN KEY (`proveedor_id`) REFERENCES `prove_proveedor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -444,7 +458,9 @@ CREATE TABLE `prove_personal_clave` (
   `cargo` varchar(200) NOT NULL,
   `firma` varchar(200) DEFAULT NULL,
   `proveedor_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `proveedor_id` (`proveedor_id`),
+  CONSTRAINT `prove_personal_clave_ibfk_1` FOREIGN KEY (`proveedor_id`) REFERENCES `prove_proveedor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -484,7 +500,9 @@ CREATE TABLE `prove_proveedor` (
   `url_copia_autenticada` varchar(200) NOT NULL,
   `razon_social` varchar(200) DEFAULT NULL,
   `calificacion` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `tipo_organizacion_id` (`tipo_organizacion_id`),
+  KEY `rubro_empresa_id` (`rubro_empresa_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -511,7 +529,12 @@ CREATE TABLE `prove_referencia` (
   `nombre_contacto` varchar(200) NOT NULL,
   `telefono_contacto` varchar(20) NOT NULL,
   `proveedor_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
+  `valor` decimal(10,0) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tipo_referencia_id` (`tipo_referencia_id`),
+  KEY `proveedor_id` (`proveedor_id`),
+  CONSTRAINT `prove_referencia_ibfk_1` FOREIGN KEY (`proveedor_id`) REFERENCES `prove_proveedor` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `prove_referencia_ibfk_2` FOREIGN KEY (`tipo_referencia_id`) REFERENCES `prove_tipo_referencia` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -607,7 +630,7 @@ CREATE TABLE `prove_tipo_referencia` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `referencia` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -616,7 +639,7 @@ CREATE TABLE `prove_tipo_referencia` (
 
 LOCK TABLES `prove_tipo_referencia` WRITE;
 /*!40000 ALTER TABLE `prove_tipo_referencia` DISABLE KEYS */;
-INSERT INTO `prove_tipo_referencia` VALUES (1,'referencias comerciales'),(2,'referencias bancarias');
+INSERT INTO `prove_tipo_referencia` VALUES (1,'referencias comerciales'),(2,'referencias bancarias'),(3,'compañías en sus últimos cinco años');
 /*!40000 ALTER TABLE `prove_tipo_referencia` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -629,4 +652,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-10 11:22:09
+-- Dump completed on 2022-05-12  8:40:04
