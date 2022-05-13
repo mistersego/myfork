@@ -55,9 +55,15 @@ def guardarRubro( request):
 #------------------------PROVEEDORES--------------------------------
 
 def proveedores(request):    
-    proveedores = Proveedor.objects.raw('select * from ((prove_proveedor as pp inner join prove_tipo_organizacion as pto on pp.tipo_organizacion_id = pto.id) inner join prove_rubro_empresa as pre on pp.rubro_empresa_id = pre.id);')
+    #proveedores = Proveedor.objects.raw('select * from ((prove_proveedor as pp inner join prove_tipo_organizacion as pto on pp.tipo_organizacion_id = pto.id) inner join prove_rubro_empresa as pre on pp.rubro_empresa_id = pre.id);')
+    proveedores = Proveedor.objects.all()
     context ={'proveedores':proveedores}
     return render(request,'proveedores/proveedores.html', context)
+
+def detalle_proveedor(request,id):    
+    proveedor = Proveedor.objects.raw('select * from ((prove_proveedor as pp inner join prove_tipo_organizacion as pto on pp.tipo_organizacion_id = pto.id) inner join prove_rubro_empresa as pre on pp.rubro_empresa_id = pre.id) WHERE pp.id = %s;',[id])
+    context ={'proveedor':proveedor[0]}
+    return render(request,'proveedores/detail_proveedor.html', context)
 
 def create_proveedor(request):
     
@@ -82,7 +88,8 @@ def eliminar_proveedor(request,id):
         proveedor.delete_file()
         proveedor.delete()
         messages.success(request, 'Proveedor eliminado correctamente.', extra_tags='success')
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return HttpResponseRedirect('/proveedores')        
+        
     except:
         messages.success(request, 'Ha ocurrido un error.', extra_tags='danger')
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -93,12 +100,16 @@ def update_proveedor(request,id):
     name = proveedor.url_copia_autenticada.name
 
     if request.method == 'POST':
-            
+       
         form = ProveedorForm(request.POST, request.FILES,instance=proveedor)
         if form.is_valid():                        
-            print(name)
-            if name != None:
+            
+            try:
+                file = request.FILES['url_copia_autenticada'].name
                 os.remove(os.path.join(settings.MEDIA_ROOT, name))
+            except:
+                pass
+            
             form.save()
             messages.success(request, 'Proveedor editado correctamente.', extra_tags='success')  
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

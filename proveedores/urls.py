@@ -9,8 +9,8 @@ urlpatterns = [
     #proveedores
     path('proveedores',views.proveedores, name = "proveedores"),
     path('proveedores/crear',views.create_proveedor, name = "create_proveedor"),
-    
-    path('proveedores/delete/<int:id>/',views.eliminar_proveedor, name = "eliminar_proveedor"),
-    path('proveedores/editar/<int:id>/',views.update_proveedor, name = "update_proveedor"),    
+    path('proveedores/detalle/<int:id>',views.detalle_proveedor, name = "detail_proveedor"),
+    path('proveedores/eliminar/<int:id>',views.eliminar_proveedor, name = "delete_proveedor"),
+    path('proveedores/editar/<int:id>',views.update_proveedor, name = "update_proveedor"),
 
 ]

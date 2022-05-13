@@ -1,0 +1,122 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<nav>
+  <div class="row">
+    <!-- /# column -->
+    <div class="col-lg-12 p-l-0 ">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="/">Home</a>
+        </li>                  
+        <li class="breadcrumb-item"><a href="{% url 'proveedores' %}">Proveedores</a></li>                  
+        <li class="breadcrumb-item active" aria-current="page">Detalles de {{proveedor.proveedor}}</li>                      
+      </ol>
+    </div>
+</nav>
+
+
+
+
+  <div class="row">  
+    <div class="col-md-12">
+      <div class="card">
+          <div class="row card-header">
+                <div >
+                    <h5 class="card-title mb-4"><strong>{{proveedor.proveedor}}</strong></h5>                                                
+                </div>
+                
+                <div class=" col text-right">                    
+                    <a href="{% url 'update_proveedor' id=proveedor.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a>        
+                    <a href="{% url 'delete_proveedor' id=proveedor.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                </div>
+                
+            </div>
+          <div class="card-body">          
+            <table id="table" class="table" width="100%" id="myTable">
+              <thead>
+                
+              </thead>
+              <tbody>               
+                <tr>        
+                    <th  scope="col">Calificación</th>           
+                    <td>{{proveedor.calificacion}}</td>             
+                    <th  scope="col">Compañía</th>
+                    <td>{{proveedor.compania}}</td>
+                </tr>              
+                <tr>
+                    <th  scope="col">Representante Legal</th>
+                    <td>{{proveedor.representante_legal}}</td> 
+                    <th  scope="col">Dirección</th>
+                    <td>{{proveedor.direccion_organizacion}}</td>
+                </tr>               
+                <tr>
+                    <th  scope="col">Teléfono</th>
+                    <td>{{proveedor.telefono}}</td>
+                    <th  scope="col">Fax</th>
+                    <td>{{proveedor.fax}}</td>
+                </tr>
+                
+                <tr>
+                    <th  scope="col">Móvil</th>
+                    <td>{{proveedor.movil}}</td>
+                    <th  scope="col">Correo Electrónico</th>   
+                    <td>{{proveedor.correo}}</td>
+                </tr>
+               
+                <tr>
+                    <th  scope="col">Sitio Web</th>
+                    <td>{{proveedor.website}}</td>
+                    <th  scope="col">Tipo Organización</th>
+                    <td>{{proveedor.tipo}}</td>
+                </tr>               
+                <tr>
+                    <th  scope="col">NIT</th>
+                    <td>{{proveedor.nit}}</td>
+                    <th  scope="col">NRC</th>
+                    <td>{{proveedor.nrc}}</td>
+                </tr>               
+                <tr>
+                    <th  scope="col">Periodo Negocio</th>
+                    <td>{{proveedor.periodo_negocio}}</td>
+                    <th  scope="col">Rubro Empresa</th>
+                    <td>{{proveedor.rubro}}</td>
+                </tr>                
+                <tr>
+                    <th  scope="col">Estado</th>
+                    <td>{{proveedor.estado}}</td>
+                    <th  scope="col">Razón Social</th>
+                    <td>{{proveedor.razon_social}}</td>
+                </tr>                             
+                <tr>                     
+                    <th  scope="col">Copia Autenticada</th>
+                    <td ><a href="{{proveedor.url_copia_autenticada.url}}" target="_blank" class="btn btn-info"> <i class="fas fa-eye"></i></a></td>
+                    <th  scope="col">Referencias (IDEA)</th>
+                    <td ><a href="{{proveedor.url_copia_autenticada.url}}" target="_blank" class="btn btn-info"> <i class="fas fa-edit"></i></a></td>
+                </tr>
+                
+                <tr>                     
+                    <th  scope="col">Personal Clave (IDEA)</th>
+                    <td ><a href="{{proveedor.url_copia_autenticada.url}}" target="_blank" class="btn btn-info"> <i class="fas fa-edit"></i></a></td>
+                    <th  scope="col">Personal Interno (IDEA)</th>
+                    <td ><a href="{{proveedor.url_copia_autenticada.url}}" target="_blank" class="btn btn-info"> <i class="fas fa-edit"></i></a></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+  
+  </div>
+    
+    {% block javascript %}
+        <script>
+            $(document).ready(function() {
+                $('#table td').addClass('text-center');
+                $('#table th').addClass('text-center');
+              } );  
+        </script>
+    {% endblock javascript %}   
+
+{% endblock %}
