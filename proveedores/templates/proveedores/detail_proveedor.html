@@ -92,15 +92,15 @@
                 <tr>                     
                     <th  scope="col">Copia Autenticada</th>
                     <td ><a href="{{proveedor.url_copia_autenticada.url}}" target="_blank" class="btn btn-info"> <i class="fas fa-eye"></i></a></td>
-                    <th  scope="col">Referencias (IDEA)</th>
-                    <td ><a href="{{proveedor.url_copia_autenticada.url}}" target="_blank" class="btn btn-info"> <i class="fas fa-edit"></i></a></td>
+                    <th  scope="col">Referencias</th>
+                    <td ><a href="{% url 'referencias_proveedor' proveedor_id=proveedor.id %}" class="btn btn-info"> <i class="fas fa-edit"></i></a></td>
                 </tr>
                 
                 <tr>                     
                     <th  scope="col">Personal Clave (IDEA)</th>
-                    <td ><a href="{{proveedor.url_copia_autenticada.url}}" target="_blank" class="btn btn-info"> <i class="fas fa-edit"></i></a></td>
+                    <td ><a href="" target="_blank" class="btn btn-info"> <i class="fas fa-edit"></i></a></td>
                     <th  scope="col">Personal Interno (IDEA)</th>
-                    <td ><a href="{{proveedor.url_copia_autenticada.url}}" target="_blank" class="btn btn-info"> <i class="fas fa-edit"></i></a></td>
+                    <td ><a href="" target="_blank" class="btn btn-info"> <i class="fas fa-edit"></i></a></td>
                 </tr>
               </tbody>
             </table>

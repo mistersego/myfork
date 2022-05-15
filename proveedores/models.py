@@ -51,3 +51,21 @@ class Proveedor(models.Model):
     class Meta:
         db_table = "prove_proveedor"
 
+
+class TipoReferencia(models.Model):
+    id = models.AutoField(primary_key=True,null=False)
+    referencia = models.CharField(max_length=100,null=False)
+    class Meta:
+        db_table = "prove_tipo_referencia"
+
+class Referencia(models.Model):
+    id = models.AutoField(primary_key=True,null=False)
+    nombre_referencia = models.CharField(max_length=200,null=False)
+    nombre_contacto = models.CharField(max_length=200,null=False)    
+    telefono_contacto = models.CharField(max_length=100,null=True,default=None)
+    valor = models.DecimalField(max_digits=10,decimal_places=0,null=False)
+    tipo_referencia_id = models.IntegerField(null=False)
+    proveedor_id = models.IntegerField(null=False)
+
+    class Meta:
+        db_table = "prove_referencia"

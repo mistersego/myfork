@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.contrib import messages
 from django.urls import reverse
 from .forms import *
+from django.db import connection
 
 def rubrosEmpresas(request):
     rubros=RubroEmpresa.objects.all()
@@ -82,9 +83,9 @@ def create_proveedor(request):
         return render(request, "proveedores/create_proveedor.html", context)
 
 
-def eliminar_proveedor(request,id):
-    proveedor = get_object_or_404(Proveedor, id = id)
+def eliminar_proveedor(request,id):    
     try:
+        proveedor = get_object_or_404(Proveedor, id = id)
         proveedor.delete_file()
         proveedor.delete()
         messages.success(request, 'Proveedor eliminado correctamente.', extra_tags='success')
@@ -123,5 +124,93 @@ def update_proveedor(request,id):
     return render(request,"proveedores/edit_proveedor.html",context)
 
 #------------------------PROVEEDORES--------------------------------
+
+#------------------------REFERENCIAS--------------------------------
+def referencias_proveedor(request,proveedor_id):
+    referencias = Proveedor.objects.raw('SELECT * FROM (prove_referencia as pr inner join prove_tipo_referencia as ptr on pr.tipo_referencia_id = ptr.id) WHERE pr.proveedor_id = %s',params=[proveedor_id])
+    proveedor = get_object_or_404(Proveedor,id = proveedor_id)
+    context = {'referencias':referencias,
+                'proveedor':proveedor}
+    return render(request,"referencias/referencias_proveedor.html",context)
+
+def crear_referencia(request,proveedor_id):
+    if request.method == 'POST':
+        nombre_referencia = request.POST['nombre_referencia']
+        nombre_contacto = request.POST['nombre_contacto']
+        telefono_contacto = request.POST['telefono_contacto']
+        valor = request.POST['valor']
+        tipo_referencia_id = request.POST['tipo_referencia_id']
+        new_proveedor_id = proveedor_id
+
+        try:            
+            with connection.cursor() as cursor:                
+                cursor.callproc('sp_INSERT_REFERENCIA',[nombre_referencia,nombre_contacto,telefono_contacto,valor,tipo_referencia_id,new_proveedor_id])           
+                records = cursor.fetchone()            
+                if records is None:
+                    messages.success(request, 'Referencia agregada correctamente.', extra_tags='success') 
+                    context = {'form':ReferenciaForm(),'proveedor':get_object_or_404(Proveedor,id=proveedor_id)}
+                    return render(request, "referencias/create_referencia.html", context)
+                else:                                  
+                    messages.success(request, records[0], extra_tags='danger')
+                    context = {'form':ReferenciaForm(request.POST),'proveedor':get_object_or_404(Proveedor,id=proveedor_id)}
+                    return render(request, "referencias/create_referencia.html", context)
+
+        except:
+            messages.success(request, 'Error en la ejecución del procedimiento.', extra_tags='danger') 
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+        context = {'form':ReferenciaForm(),'proveedor':get_object_or_404(Proveedor,id=proveedor_id)}
+        return render(request, "referencias/create_referencia.html", context)
+
+def eliminar_referencia(request,proveedor_id,referencia_id):
+    try:
+        referencia = get_object_or_404(Referencia, id = referencia_id)
+        referencia.delete()
+        messages.success(request, 'Referencia eliminada correctamente.', extra_tags='success')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        
+    except:
+        messages.success(request, 'Ha ocurrido un error.', extra_tags='danger')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+def editar_referencia(request,proveedor_id,referencia_id):
+    referencia = get_object_or_404(Referencia, id = referencia_id)     
+    proveedor = get_object_or_404(Proveedor,id = proveedor_id)  
+
+    if request.method == 'POST':
+    
+        form = ReferenciaForm(request.POST,instance=referencia)
+        
+        nombre_referencia = request.POST['nombre_referencia']
+        nombre_contacto = request.POST['nombre_contacto']
+        telefono_contacto = request.POST['telefono_contacto']
+        valor = request.POST['valor']
+        tipo_referencia_id = request.POST['tipo_referencia_id']
+        
+        try:            
+            with connection.cursor() as cursor:                
+                cursor.callproc('sp_UPDATE_REFERENCIA',[referencia_id,nombre_referencia,nombre_contacto,telefono_contacto,valor,tipo_referencia_id])
+                records = cursor.fetchone()            
+                if records is None:
+                    messages.success(request, 'Referencia editada correctamente.', extra_tags='success') 
+                    context = {'form':form,'proveedor':get_object_or_404(Proveedor,id=proveedor_id)}
+                    return render(request, "referencias/edit_referencia.html", context)
+                else:                                  
+                    messages.success(request, records[0], extra_tags='danger')
+                    context = {'form':form,'proveedor':get_object_or_404(Proveedor,id=proveedor_id)}
+                    return render(request, "referencias/edit_referencia.html", context)
+
+        except:
+            messages.success(request, 'Error en la ejecución del procedimiento.', extra_tags='danger') 
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))         
+        
+    else:
+        form = ReferenciaForm(instance=referencia)
+
+    context = {'form':form,'proveedor':proveedor}
+    return render(request,"referencias/edit_referencia.html",context)
+
+
+#------------------------REFERENCIAS--------------------------------
 
 

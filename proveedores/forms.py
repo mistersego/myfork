@@ -71,6 +71,7 @@ class ProveedorForm(ModelForm):
         return self.cleaned_data
     
     class Meta:        
+
         query = TipoOrganizacion.objects.all()
         organizacion_choices = []
         
@@ -178,4 +179,48 @@ class ProveedorForm(ModelForm):
             'razon_social':'Razón Social',
             'calificacion':'Calificación',
             'rubro_empresa_id':'Rubro Empresa'
+        }
+
+class ReferenciaForm(ModelForm):
+
+    class Meta:        
+
+        query = TipoReferencia.objects.all()
+        tipos_choices = []
+        
+        for q in query:
+            tipos_choices.append([q.id,q.referencia])
+
+        model = Referencia
+        #fields = "__all__"
+        fields = ['nombre_referencia','nombre_contacto','telefono_contacto','tipo_referencia_id','valor']
+
+        widgets = {
+            'nombre_referencia': TextInput(attrs={
+                'class': "form-control col-md-6",
+                'style': 'max-width:inherit;',                        
+            }),
+            'nombre_contacto': TextInput(attrs={
+                'class': "form-control col-md-6",
+                'style': 'max-width:inherit;',                        
+            }),
+            'telefono_contacto': TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width:inherit;',                        
+            }),                   
+            'tipo_referencia_id': Select(attrs={
+                'class': "form-control",
+                'style': 'max-width:inherit;'                                      
+            },choices=tipos_choices),            
+            'valor': NumberInput(attrs={
+                'class': "form-control",
+                'style': 'max-width:inherit;',                        
+            }),         
+        }
+
+        labels = {
+            'tipo_referencia_id' : 'Tipo de referencia',
+            'telefono_contacto' : 'Teléfono',
+            'nombre_referencia' : 'Nombre de referencia',
+            'nombre_contacto': 'Nombre de contacto'
         }
