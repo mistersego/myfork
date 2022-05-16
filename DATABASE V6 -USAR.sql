@@ -653,3 +653,188 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2022-05-12  8:40:04
+
+DELIMITER $$
+
+CREATE OR REPLACE PROCEDURE sp_UPDATE_REFERENCIA(IN referencia_id_v INT,IN nombre_referencia_v VARCHAR(200), IN nombre_contacto_v VARCHAR(200),
+ IN telefono_contacto_v VARCHAR(200), IN valor_v DECIMAL(10,0),IN tipo_referencia_id_v INT)
+
+BEGIN
+
+		DECLARE referencia_handler CONDITION FOR SQLSTATE '45000';
+		DECLARE nombre_handler CONDITION FOR SQLSTATE '45001';
+		DECLARE telefono_handler CONDITION FOR SQLSTATE '45002';
+		DECLARE valor_handler CONDITION FOR SQLSTATE '45003';
+		DECLARE referencia_id_handler CONDITION FOR SQLSTATE '45004';
+		DECLARE tipo_handler CONDITION FOR SQLSTATE '45005';	
+	
+		
+		DECLARE EXIT HANDLER FOR referencia_handler 
+		   BEGIN
+         	SELECT 'El nombre de la referencia debe incluir de 5 a 200 caracteres.' AS error_message;
+    		END;
+   
+		
+		DECLARE EXIT HANDLER FOR nombre_handler
+			BEGIN
+	         SELECT 'El nombre del contacto debe incluir de 5 a 200 caracteres y no contener números.' AS error_message;
+	    	END;
+			 
+		DECLARE EXIT HANDLER FOR telefono_handler
+			BEGIN
+	         SELECT 'El formato de teléfono es inválido.' AS error_message;
+	    	END;	
+			 
+		DECLARE EXIT HANDLER FOR valor_handler
+			BEGIN
+	         SELECT 'Debe ingresar un valor númerico mayor a cero. ' AS error_message;
+	    	END;		 
+			 
+		DECLARE EXIT HANDLER FOR referencia_id_handler
+			BEGIN
+	         SELECT 'Debe actualizar una referencia existente en la base de datos. ' AS error_message;
+	    	END;		
+	    	
+	   DECLARE EXIT HANDLER FOR tipo_handler
+			BEGIN
+	         SELECT 'Debe ingresar un tipo de referencia existente en la base de datos. ' AS error_message;
+	    	END;	
+			 
+		
+		IF ((nombre_referencia_v REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d10-9[[:blank:]]){5,200}$') = 0) THEN			
+			SIGNAL referencia_handler;
+		END IF;
+		
+	
+	   IF ((nombre_contacto_v REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d1[[:blank:]]){5,200}$') = 0) THEN			
+			SIGNAL nombre_handler;
+		END IF;
+		
+		IF ((telefono_contacto_v REGEXP '^[+]{1}([0-9]){6,14}$') = 0)THEN			
+			SIGNAL telefono_handler;
+		END IF;
+		
+		IF ((valor_v REGEXP '^([0-9]{1,})$') = 0)THEN			
+			SIGNAL valor_handler;
+		END IF;
+		
+		IF(SELECT CASE
+         WHEN EXISTS (SELECT 1
+                      FROM   prove_referencia AS pr
+                      WHERE  pr.id = referencia_id_v) THEN 1 ELSE 2 
+				       	END) != 1 THEN
+				SIGNAL referencia_id_handler;
+		END IF;
+		
+		IF(SELECT CASE
+         WHEN EXISTS (SELECT 1
+                      FROM   prove_tipo_referencia AS ptr
+                      WHERE  ptr.id = tipo_referencia_id_v) THEN 1 ELSE 2 
+				       	END) != 1 THEN
+				SIGNAL tipo_handler;
+		END IF;
+		
+     START TRANSACTION;
+     
+     UPDATE prove_referencia SET nombre_referencia = nombre_referencia_v, nombre_contacto = nombre_contacto_v,
+     telefono_contacto = telefono_contacto_v, valor = valor_v, tipo_referencia_id = tipo_referencia_id_v WHERE id = referencia_id_v;
+     
+	  COMMIT;
+
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+
+/* -------------------------------------------------------------------------------------*/
+
+CREATE OR REPLACE PROCEDURE sp_INSERT_REFERENCIA(IN nombre_referencia_v VARCHAR(200), IN nombre_contacto_v VARCHAR(200),
+ IN telefono_contacto_v VARCHAR(200), IN valor_v DECIMAL(10,0), IN tipo_referencia_id_v INT,IN proveedor_id_v INT)
+
+BEGIN
+
+		DECLARE referencia_handler CONDITION FOR SQLSTATE '45000';
+		DECLARE nombre_handler CONDITION FOR SQLSTATE '45001';
+		DECLARE telefono_handler CONDITION FOR SQLSTATE '45002';
+		DECLARE valor_handler CONDITION FOR SQLSTATE '45003';
+		DECLARE tipo_handler CONDITION FOR SQLSTATE '45004';
+		DECLARE proveedor_handler CONDITION FOR SQLSTATE '45005';
+	
+		
+		DECLARE EXIT HANDLER FOR referencia_handler 
+		   BEGIN
+         	SELECT 'El nombre de la referencia debe incluir de 5 a 200 caracteres.' AS error_message;
+    		END;
+   
+		
+		DECLARE EXIT HANDLER FOR nombre_handler
+			BEGIN
+	         SELECT 'El nombre del contacto debe incluir de 5 a 200 caracteres y no contener números.' AS error_message;
+	    	END;
+			 
+		DECLARE EXIT HANDLER FOR telefono_handler
+			BEGIN
+	         SELECT 'El formato de teléfono es inválido.' AS error_message;
+	    	END;	
+			 
+		DECLARE EXIT HANDLER FOR valor_handler
+			BEGIN
+	         SELECT 'Debe ingresar un valor númerico mayor a cero. ' AS error_message;
+	    	END;		 		
+			 
+		DECLARE EXIT HANDLER FOR tipo_handler
+			BEGIN
+	         SELECT 'Debe ingresar un tipo de referencia existente en la base de datos. ' AS error_message;
+	    	END;	
+			 
+		DECLARE EXIT HANDLER FOR proveedor_handler
+			BEGIN
+	         SELECT 'Debe ingresar un proveedor existente en la base de datos. ' AS error_message;
+	    	END;	 		    	
+		
+		IF ((nombre_referencia_v REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d10-9[[:blank:]]){5,200}$') = 0) THEN			
+			SIGNAL referencia_handler;
+		END IF;
+		
+	
+	   IF ((nombre_contacto_v REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d1[[:blank:]]){5,200}$') = 0) THEN			
+			SIGNAL nombre_handler;
+		END IF;
+		
+		IF ((telefono_contacto_v REGEXP '^[+]{1}([0-9]){6,14}$') = 0)THEN			
+			SIGNAL telefono_handler;
+		END IF;
+		
+		IF ((valor_v REGEXP '^([0-9]{1,})$') = 0)THEN			
+			SIGNAL valor_handler;
+		END IF;
+		
+		IF(SELECT CASE
+         WHEN EXISTS (SELECT 1
+                      FROM   prove_tipo_referencia AS ptr
+                      WHERE  ptr.id = tipo_referencia_id_v) THEN 1 ELSE 2 
+				       	END) != 1 THEN
+				SIGNAL tipo_handler;
+		END IF;
+
+		IF(SELECT CASE
+         WHEN EXISTS (SELECT 1
+                      FROM   prove_proveedor AS pp
+                      WHERE  pp.id = proveedor_id_v) THEN 1 ELSE 2 
+				       	END) != 1 THEN
+				SIGNAL proveedor_handler;
+		END IF;
+		
+     START TRANSACTION;
+
+     INSERT INTO prove_referencia(nombre_referencia,nombre_contacto,telefono_contacto,valor,tipo_referencia_id,proveedor_id) 
+     VALUES (nombre_referencia_v,nombre_contacto_v,telefono_contacto_v,valor_v,tipo_referencia_id_v,proveedor_id_v);
+     
+	  COMMIT;
+
+END $$
+
+DELIMITER ;
+
