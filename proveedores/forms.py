@@ -224,3 +224,27 @@ class ReferenciaForm(ModelForm):
             'nombre_referencia' : 'Nombre de referencia',
             'nombre_contacto': 'Nombre de contacto'
         }
+
+
+class PersonalForm(ModelForm):
+    class Meta:
+        
+        model = Personal
+
+        fields = ['nombre','tipo_personal']
+
+        widgets = {           
+            'nombre': TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width:inherit;',                        
+            }),                                      
+            'tipo_personal': TextInput(attrs={
+                'class': "form-control",
+                'style': 'max-width:inherit;',                        
+            }),         
+        }
+
+        labels = {
+            'tipo_personal' : 'Puesto',
+            'nombre': 'Nombre'
+        }

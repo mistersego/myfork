@@ -97,10 +97,10 @@
                 </tr>
                 
                 <tr>                     
-                    <th  scope="col">Personal Clave (IDEA)</th>
-                    <td ><a href="" target="_blank" class="btn btn-info"> <i class="fas fa-edit"></i></a></td>
-                    <th  scope="col">Personal Interno (IDEA)</th>
-                    <td ><a href="" target="_blank" class="btn btn-info"> <i class="fas fa-edit"></i></a></td>
+                  <th  scope="col">Personal Clave (IDEA)</th>
+                  <td ><a href="" class="btn btn-info"> <i class="fas fa-edit"></i></a></td>  
+                  <th  scope="col">Personal Interno</th>
+                  <td ><a href="{% url 'personal_proveedor' proveedor_id=proveedor.id %}" class="btn btn-info"> <i class="fas fa-edit"></i></a></td>                    
                 </tr>
               </tbody>
             </table>

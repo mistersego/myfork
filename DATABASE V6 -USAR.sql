@@ -426,7 +426,7 @@ DROP TABLE IF EXISTS `prove_personal`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `prove_personal` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(200) NOT NULL,
   `tipo_personal` varchar(20) NOT NULL,
   `proveedor_id` int(11) NOT NULL,
@@ -654,90 +654,57 @@ UNLOCK TABLES;
 
 -- Dump completed on 2022-05-12  8:40:04
 
+
+/* #####################  PROCEDIMIENTOS ALMACENADOS #####################  */
+
 DELIMITER $$
 
-CREATE OR REPLACE PROCEDURE sp_UPDATE_REFERENCIA(IN referencia_id_v INT,IN nombre_referencia_v VARCHAR(200), IN nombre_contacto_v VARCHAR(200),
- IN telefono_contacto_v VARCHAR(200), IN valor_v DECIMAL(10,0),IN tipo_referencia_id_v INT)
+CREATE OR REPLACE PROCEDURE sp_INSERT_PERSONAL(IN p_nombre VARCHAR(200),
+ IN p_tipo_personal VARCHAR(20), IN p_proveedor_id INT)
 
 BEGIN
 
-		DECLARE referencia_handler CONDITION FOR SQLSTATE '45000';
-		DECLARE nombre_handler CONDITION FOR SQLSTATE '45001';
-		DECLARE telefono_handler CONDITION FOR SQLSTATE '45002';
-		DECLARE valor_handler CONDITION FOR SQLSTATE '45003';
-		DECLARE referencia_id_handler CONDITION FOR SQLSTATE '45004';
-		DECLARE tipo_handler CONDITION FOR SQLSTATE '45005';	
+		DECLARE h_nombre CONDITION FOR SQLSTATE '45000';
+		DECLARE h_tipo_personal CONDITION FOR SQLSTATE '45001';
+		DECLARE h_proveedor_id CONDITION FOR SQLSTATE '45002';
 	
 		
-		DECLARE EXIT HANDLER FOR referencia_handler 
+		DECLARE EXIT HANDLER FOR h_nombre
 		   BEGIN
-         	SELECT 'El nombre de la referencia debe incluir de 5 a 200 caracteres.' AS error_message;
+         	SELECT 'El nombre del personal debe incluir de 5 a 200 caracteres y no contener números.' AS error_message;
     		END;
    
 		
-		DECLARE EXIT HANDLER FOR nombre_handler
+		DECLARE EXIT HANDLER FOR h_tipo_personal
 			BEGIN
-	         SELECT 'El nombre del contacto debe incluir de 5 a 200 caracteres y no contener números.' AS error_message;
+	         SELECT 'El puesto  debe incluir de 5 a 200 caracteres.' AS error_message;
 	    	END;
-			 
-		DECLARE EXIT HANDLER FOR telefono_handler
+
+		DECLARE EXIT HANDLER FOR h_proveedor_id
 			BEGIN
-	         SELECT 'El formato de teléfono es inválido.' AS error_message;
-	    	END;	
-			 
-		DECLARE EXIT HANDLER FOR valor_handler
-			BEGIN
-	         SELECT 'Debe ingresar un valor númerico mayor a cero. ' AS error_message;
-	    	END;		 
-			 
-		DECLARE EXIT HANDLER FOR referencia_id_handler
-			BEGIN
-	         SELECT 'Debe actualizar una referencia existente en la base de datos. ' AS error_message;
-	    	END;		
-	    	
-	   DECLARE EXIT HANDLER FOR tipo_handler
-			BEGIN
-	         SELECT 'Debe ingresar un tipo de referencia existente en la base de datos. ' AS error_message;
-	    	END;	
-			 
+	         SELECT 'Debe ingresar un proveedor existente en la base de datos.' AS error_message;
+	    	END;					    	
 		
-		IF ((nombre_referencia_v REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d10-9[[:blank:]]){5,200}$') = 0) THEN			
-			SIGNAL referencia_handler;
+	  IF ((p_nombre REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d1[[:blank:]]){5,200}$') = 0) THEN			
+			SIGNAL h_nombre;
 		END IF;
 		
-	
-	   IF ((nombre_contacto_v REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d1[[:blank:]]){5,200}$') = 0) THEN			
-			SIGNAL nombre_handler;
+		IF ((p_tipo_personal REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d10-9[[:blank:]]){5,20}$') = 0) THEN			
+			SIGNAL h_tipo_personal;
 		END IF;
-		
-		IF ((telefono_contacto_v REGEXP '^[+]{1}([0-9]){6,14}$') = 0)THEN			
-			SIGNAL telefono_handler;
-		END IF;
-		
-		IF ((valor_v REGEXP '^([0-9]{1,})$') = 0)THEN			
-			SIGNAL valor_handler;
-		END IF;
-		
+			
 		IF(SELECT CASE
          WHEN EXISTS (SELECT 1
-                      FROM   prove_referencia AS pr
-                      WHERE  pr.id = referencia_id_v) THEN 1 ELSE 2 
+                      FROM   prove_proveedor AS pp
+                      WHERE  pp.id = p_proveedor_id) THEN 1 ELSE 2 
 				       	END) != 1 THEN
-				SIGNAL referencia_id_handler;
-		END IF;
-		
-		IF(SELECT CASE
-         WHEN EXISTS (SELECT 1
-                      FROM   prove_tipo_referencia AS ptr
-                      WHERE  ptr.id = tipo_referencia_id_v) THEN 1 ELSE 2 
-				       	END) != 1 THEN
-				SIGNAL tipo_handler;
+				SIGNAL h_proveedor_id;
 		END IF;
 		
      START TRANSACTION;
-     
-     UPDATE prove_referencia SET nombre_referencia = nombre_referencia_v, nombre_contacto = nombre_contacto_v,
-     telefono_contacto = telefono_contacto_v, valor = valor_v, tipo_referencia_id = tipo_referencia_id_v WHERE id = referencia_id_v;
+
+     INSERT INTO prove_personal(nombre,tipo_personal,proveedor_id) 
+     VALUES (p_nombre,p_tipo_personal,p_proveedor_id);
      
 	  COMMIT;
 
@@ -747,90 +714,142 @@ DELIMITER ;
 
 DELIMITER $$
 
+CREATE OR REPLACE PROCEDURE sp_UPDATE_PERSONAL(IN p_personal_id INT,IN p_nombre VARCHAR(200),
+ IN p_tipo_personal VARCHAR(20))
 
-/* -------------------------------------------------------------------------------------*/
+BEGIN
+		DECLARE h_personal_id CONDITION FOR SQLSTATE '45000';
+		DECLARE h_nombre CONDITION FOR SQLSTATE '45001';
+		DECLARE h_tipo_personal CONDITION FOR SQLSTATE '45002';	
+	
+			 
+		DECLARE EXIT HANDLER FOR h_personal_id
+			BEGIN
+	         SELECT 'Debe actualizar un miembro de personal existente en la base de datos. ' AS error_message;
+	    	END;
+			 
+		DECLARE EXIT HANDLER FOR h_nombre
+			BEGIN
+	         SELECT 'El nombre del personal debe incluir de 5 a 200 caracteres y no contener números.' AS error_message;
+	    	END;		
+	    	
+	   DECLARE EXIT HANDLER FOR h_tipo_personal
+			BEGIN
+	         SELECT 'El puesto debe incluir de 5 a 20 caracteres.' AS error_message;
+	    	END;	
+	    	
+	 
+		IF(SELECT CASE
+         WHEN EXISTS (SELECT 1
+                      FROM   prove_personal AS pp
+                      WHERE  pp.id = p_personal_id) THEN 1 ELSE 2 
+				       	END) != 1 THEN
+				SIGNAL h_personal_id;
+		END IF;
+	
+	  IF ((p_nombre REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d1[[:blank:]]){5,200}$') = 0) THEN			
+			SIGNAL h_nombre;
+		END IF;
+		
+		IF ((p_tipo_personal REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d10-9[[:blank:]]){5,20}$') = 0) THEN			
+			SIGNAL h_tipo_personal;
+		END IF;
+			
+		
+     START TRANSACTION;
+     
+     UPDATE prove_personal SET nombre = p_nombre, tipo_personal = p_tipo_personal
+	   WHERE id = p_personal_id;
+     
+	  COMMIT;
 
-CREATE OR REPLACE PROCEDURE sp_INSERT_REFERENCIA(IN nombre_referencia_v VARCHAR(200), IN nombre_contacto_v VARCHAR(200),
- IN telefono_contacto_v VARCHAR(200), IN valor_v DECIMAL(10,0), IN tipo_referencia_id_v INT,IN proveedor_id_v INT)
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE OR REPLACE PROCEDURE sp_INSERT_REFERENCIA(IN p_nombre_referencia VARCHAR(200), IN p_nombre_contacto VARCHAR(200),
+ IN p_telefono_contacto VARCHAR(200), IN p_valor DECIMAL(10,0), IN p_tipo_referencia_id INT,IN p_proveedor_id INT)
 
 BEGIN
 
-		DECLARE referencia_handler CONDITION FOR SQLSTATE '45000';
-		DECLARE nombre_handler CONDITION FOR SQLSTATE '45001';
-		DECLARE telefono_handler CONDITION FOR SQLSTATE '45002';
-		DECLARE valor_handler CONDITION FOR SQLSTATE '45003';
-		DECLARE tipo_handler CONDITION FOR SQLSTATE '45004';
-		DECLARE proveedor_handler CONDITION FOR SQLSTATE '45005';
+		DECLARE h_referencia CONDITION FOR SQLSTATE '45000';
+		DECLARE h_nombre CONDITION FOR SQLSTATE '45001';
+		DECLARE h_telefono CONDITION FOR SQLSTATE '45002';
+		DECLARE h_valor CONDITION FOR SQLSTATE '45003';
+		DECLARE h_tipo CONDITION FOR SQLSTATE '45004';
+		DECLARE h_proveedor CONDITION FOR SQLSTATE '45005';
 	
 		
-		DECLARE EXIT HANDLER FOR referencia_handler 
+		DECLARE EXIT HANDLER FOR h_referencia 
 		   BEGIN
          	SELECT 'El nombre de la referencia debe incluir de 5 a 200 caracteres.' AS error_message;
     		END;
    
 		
-		DECLARE EXIT HANDLER FOR nombre_handler
+		DECLARE EXIT HANDLER FOR h_nombre
 			BEGIN
 	         SELECT 'El nombre del contacto debe incluir de 5 a 200 caracteres y no contener números.' AS error_message;
 	    	END;
 			 
-		DECLARE EXIT HANDLER FOR telefono_handler
+		DECLARE EXIT HANDLER FOR h_telefono
 			BEGIN
 	         SELECT 'El formato de teléfono es inválido.' AS error_message;
 	    	END;	
 			 
-		DECLARE EXIT HANDLER FOR valor_handler
+		DECLARE EXIT HANDLER FOR h_valor
 			BEGIN
 	         SELECT 'Debe ingresar un valor númerico mayor a cero. ' AS error_message;
 	    	END;		 		
 			 
-		DECLARE EXIT HANDLER FOR tipo_handler
+		DECLARE EXIT HANDLER FOR h_tipo
 			BEGIN
 	         SELECT 'Debe ingresar un tipo de referencia existente en la base de datos. ' AS error_message;
 	    	END;	
 			 
-		DECLARE EXIT HANDLER FOR proveedor_handler
+		DECLARE EXIT HANDLER FOR h_proveedor
 			BEGIN
 	         SELECT 'Debe ingresar un proveedor existente en la base de datos. ' AS error_message;
 	    	END;	 		    	
 		
-		IF ((nombre_referencia_v REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d10-9[[:blank:]]){5,200}$') = 0) THEN			
-			SIGNAL referencia_handler;
+		IF ((p_nombre_referencia REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d10-9[[:blank:]]){5,200}$') = 0) THEN			
+			SIGNAL h_referencia;
 		END IF;
 		
 	
-	   IF ((nombre_contacto_v REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d1[[:blank:]]){5,200}$') = 0) THEN			
-			SIGNAL nombre_handler;
+	   IF ((p_nombre_contacto REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d1[[:blank:]]){5,200}$') = 0) THEN			
+			SIGNAL h_nombre;
 		END IF;
 		
-		IF ((telefono_contacto_v REGEXP '^[+]{1}([0-9]){6,14}$') = 0)THEN			
-			SIGNAL telefono_handler;
+		IF ((p_telefono_contacto REGEXP '^[+]{1}([0-9]){6,14}$') = 0)THEN			
+			SIGNAL h_telefono;
 		END IF;
 		
-		IF ((valor_v REGEXP '^([0-9]{1,})$') = 0)THEN			
-			SIGNAL valor_handler;
+		IF ((p_valor REGEXP '^([0-9]{1,})$') = 0)THEN			
+			SIGNAL h_valor;
 		END IF;
 		
 		IF(SELECT CASE
          WHEN EXISTS (SELECT 1
                       FROM   prove_tipo_referencia AS ptr
-                      WHERE  ptr.id = tipo_referencia_id_v) THEN 1 ELSE 2 
+                      WHERE  ptr.id = p_tipo_referencia_id) THEN 1 ELSE 2 
 				       	END) != 1 THEN
-				SIGNAL tipo_handler;
+				SIGNAL h_tipo;
 		END IF;
 
 		IF(SELECT CASE
          WHEN EXISTS (SELECT 1
                       FROM   prove_proveedor AS pp
-                      WHERE  pp.id = proveedor_id_v) THEN 1 ELSE 2 
+                      WHERE  pp.id = p_proveedor_id) THEN 1 ELSE 2 
 				       	END) != 1 THEN
-				SIGNAL proveedor_handler;
+				SIGNAL h_proveedor;
 		END IF;
 		
      START TRANSACTION;
 
      INSERT INTO prove_referencia(nombre_referencia,nombre_contacto,telefono_contacto,valor,tipo_referencia_id,proveedor_id) 
-     VALUES (nombre_referencia_v,nombre_contacto_v,telefono_contacto_v,valor_v,tipo_referencia_id_v,proveedor_id_v);
+     VALUES (p_nombre_referencia,p_nombre_contacto,p_telefono_contacto,p_valor,p_tipo_referencia_id,p_proveedor_id);
      
 	  COMMIT;
 
@@ -838,3 +857,98 @@ END $$
 
 DELIMITER ;
 
+DELIMITER $$
+
+CREATE OR REPLACE PROCEDURE sp_UPDATE_REFERENCIA(IN p_referencia_id INT,IN p_nombre_referencia VARCHAR(200), IN p_nombre_contacto VARCHAR(200),
+ IN p_telefono_contacto VARCHAR(200), IN p_valor DECIMAL(10,0),IN p_tipo_referencia_id INT)
+
+BEGIN
+
+		DECLARE h_referencia CONDITION FOR SQLSTATE '45000';
+		DECLARE h_nombre CONDITION FOR SQLSTATE '45001';
+		DECLARE h_telefono CONDITION FOR SQLSTATE '45002';
+		DECLARE h_valor CONDITION FOR SQLSTATE '45003';
+		DECLARE h_referencia_id CONDITION FOR SQLSTATE '45004';
+		DECLARE h_tipo CONDITION FOR SQLSTATE '45005';	
+	
+		
+		DECLARE EXIT HANDLER FOR h_referencia
+		   BEGIN
+         	SELECT 'El nombre de la referencia debe incluir de 5 a 200 caracteres.' AS error_message;
+    		END;
+   
+		
+		DECLARE EXIT HANDLER FOR h_nombre
+			BEGIN
+	         SELECT 'El nombre del contacto debe incluir de 5 a 200 caracteres y no contener números.' AS error_message;
+	    	END;
+			 
+		DECLARE EXIT HANDLER FOR h_telefono
+			BEGIN
+	         SELECT 'El formato de teléfono es inválido.' AS error_message;
+	    	END;	
+			 
+		DECLARE EXIT HANDLER FOR h_valor
+			BEGIN
+	         SELECT 'Debe ingresar un valor númerico mayor a cero. ' AS error_message;
+	    	END;		 
+			 
+		DECLARE EXIT HANDLER FOR h_referencia_id
+			BEGIN
+	         SELECT 'Debe actualizar una referencia existente en la base de datos. ' AS error_message;
+	    	END;		
+	    	
+	   DECLARE EXIT HANDLER FOR h_tipo
+			BEGIN
+	         SELECT 'Debe ingresar un tipo de referencia existente en la base de datos. ' AS error_message;
+	    	END;	
+			 
+		
+		IF ((p_nombre_referencia REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d10-9[[:blank:]]){5,200}$') = 0) THEN			
+			SIGNAL h_referencia;
+		END IF;
+		
+	
+	   IF ((p_nombre_contacto REGEXP '^([a-zA-ZÀ-ÿ\u00f1\u00d1[[:blank:]]){5,200}$') = 0) THEN			
+			SIGNAL h_nombre;
+		END IF;
+		
+		IF ((p_telefono_contacto REGEXP '^[+]{1}([0-9]){6,14}$') = 0)THEN			
+			SIGNAL h_telefono;
+		END IF;
+		
+		IF ((p_valor REGEXP '^([0-9]{1,})$') = 0)THEN			
+			SIGNAL h_valor;
+		END IF;
+		
+		IF(SELECT CASE
+         WHEN EXISTS (SELECT 1
+                      FROM   prove_referencia AS pr
+                      WHERE  pr.id = p_referencia_id) THEN 1 ELSE 2 
+				       	END) != 1 THEN
+				SIGNAL h_referencia_id;
+		END IF;
+		
+		IF(SELECT CASE
+         WHEN EXISTS (SELECT 1
+                      FROM   prove_tipo_referencia AS ptr
+                      WHERE  ptr.id = p_tipo_referencia_id) THEN 1 ELSE 2 
+				       	END) != 1 THEN
+				SIGNAL h_tipo;
+		END IF;
+		
+     START TRANSACTION;
+     
+     UPDATE prove_referencia SET nombre_referencia = p_nombre_referencia, nombre_contacto = p_nombre_contacto,
+     telefono_contacto = p_telefono_contacto, valor = p_valor, tipo_referencia_id = p_tipo_referencia_id WHERE id = p_referencia_id;
+     
+	  COMMIT;
+
+END $$
+
+DELIMITER ;
+
+
+
+
+/* #####################  PROCEDIMIENTOS ALMACENADOS #####################  */

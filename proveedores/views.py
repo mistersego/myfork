@@ -214,3 +214,93 @@ def editar_referencia(request,proveedor_id,referencia_id):
 #------------------------REFERENCIAS--------------------------------
 
 
+#---------------------------PERSONAL--------------------------------
+
+def  personal_proveedor(request,proveedor_id):
+    proveedor = get_object_or_404(Proveedor,id = proveedor_id)
+    personal = Personal.objects.filter(proveedor_id = proveedor_id)
+    context = {'proveedor':proveedor,'personal':personal}
+    return render(request,"personal/personal_proveedor.html",context)
+
+def crear_personal(request,proveedor_id):    
+
+    if request.method == 'POST':
+        nombre = request.POST['nombre']        
+        tipo_personal = request.POST['tipo_personal']
+        new_proveedor_id = proveedor_id
+
+        try:            
+            with connection.cursor() as cursor:                
+                cursor.callproc('sp_INSERT_PERSONAL',[nombre,tipo_personal,new_proveedor_id])           
+                records = cursor.fetchone()            
+                if records is None:
+                    messages.success(request, 'Personal agregado correctamente.', extra_tags='success') 
+                    context = {'form':PersonalForm(),'proveedor':get_object_or_404(Proveedor,id=proveedor_id)}
+                    return render(request, "personal/create_personal.html", context)
+                else:                                  
+                    messages.success(request, records[0], extra_tags='danger')
+                    context = {'form':PersonalForm(request.POST),'proveedor':get_object_or_404(Proveedor,id=proveedor_id)}
+                    return render(request, "personal/create_personal.html", context)
+
+        except:
+            messages.success(request, 'Error en la ejecución del procedimiento.', extra_tags='danger') 
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+        context = {'form':PersonalForm(),'proveedor':get_object_or_404(Proveedor,id=proveedor_id)}
+        return render(request, "personal/create_personal.html", context)
+
+
+    
+
+def editar_personal(request,proveedor_id,personal_id):
+    personal = get_object_or_404(Personal, id = personal_id)   
+    proveedor = get_object_or_404(Proveedor,id = proveedor_id)  
+
+    if request.method == 'POST':
+    
+        form = PersonalForm(request.POST,instance=personal)
+        
+        nombre = request.POST['nombre']        
+        tipo_personal = request.POST['tipo_personal']
+
+        try:            
+            with connection.cursor() as cursor:                
+                cursor.callproc('sp_UPDATE_PERSONAL',[personal_id,nombre,tipo_personal])
+                records = cursor.fetchone()            
+                if records is None:
+                    messages.success(request, 'Personal editado correctamente.', extra_tags='success') 
+                    context = {'form':form,'proveedor':get_object_or_404(Proveedor,id=proveedor_id)}
+                    return render(request, "personal/edit_personal.html", context)
+                else:                                  
+                    messages.success(request, records[0], extra_tags='danger')
+                    context = {'form':form,'proveedor':get_object_or_404(Proveedor,id=proveedor_id)}
+                    return render(request, "personal/edit_personal.html", context)
+
+        except:
+            messages.success(request, 'Error en la ejecución del procedimiento.', extra_tags='danger') 
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        
+    else:
+        form = PersonalForm(instance=personal)
+
+    context = {'form':form,'proveedor':proveedor}
+    return render(request,"personal/edit_personal.html",context)
+
+def eliminar_personal(request,proveedor_id,personal_id):
+    try:
+        personal = get_object_or_404(Personal, id = personal_id)
+        personal.delete()
+        messages.success(request, 'Personal eliminado correctamente.', extra_tags='success')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        
+    except:
+        messages.success(request, 'Ha ocurrido un error.', extra_tags='danger')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+#---------------------------PERSONAL--------------------------------
+
+
+
+
+1

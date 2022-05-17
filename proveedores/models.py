@@ -69,3 +69,12 @@ class Referencia(models.Model):
 
     class Meta:
         db_table = "prove_referencia"
+
+class Personal(models.Model):
+    id = models.AutoField(primary_key=True,null=False)
+    nombre = models.CharField(max_length=200,null=False)
+    tipo_personal = models.CharField(max_length=20,null=False)
+    proveedor_id = models.IntegerField(null=False)
+
+    class Meta:
+        db_table = "prove_personal"
