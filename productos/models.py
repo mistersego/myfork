@@ -20,13 +20,14 @@ class Producto(models.Model):
     id =models.AutoField(primary_key=True)
     marca_id = models.CharField(max_length=50)
     precio = models.CharField(max_length=10)
-    caracteristica = models.BooleanField()
+    caracteristica = models.CharField(max_length=120)
     color = models.CharField(max_length=10)
     utilidad = models.CharField(max_length=10)
-    descripcion = models.CharField(max_length=10)
-    garantia = models.CharField(max_length=10)
+    descripcion = models.CharField(max_length=120)
+    garantia = models.CharField(max_length=50)
     nombre = models.CharField(max_length=10)
-    url_imagen_producto = models.CharField(max_length=10)
+    url_imagen_producto = models.ImageField(upload_to="Uploaded Files/")
+    #dateTimeOfUpload = models.DateTimeField(auto_now = True)
 
     def __str__(self):
         return self.nombre

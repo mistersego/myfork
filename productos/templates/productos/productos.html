@@ -23,12 +23,12 @@
      <div class="col-md-12 ">
        <!-- Button trigger modal -->
        <div class="text-right">
-         <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#exampleModal">
+        <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#exampleModal">
            <i class="fas fa-save"></i>
          </button>
        </div>
        <!-- Modal -->
-        <form class="" action="{% url 'guardar_producto' %}" method="post">
+        <form class="" action="{% url 'guardar_producto' %}" method="post" id="formAddProd" enctype="multipart/form-data">
         {% csrf_token %}  
          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
@@ -44,12 +44,14 @@
                    <div class="col-md-12">
                      <label>Nombre del producto</label>
                      <input required type="text" name="nombre" class="form-control" value="">
-                   </div>
+                   </div>                   
                    <div class="col-md-12">
                      <label>Marca del producto</label>
-                     <select name="marca_id" id="marca_id" class="form-control">
+                     <select name="marca_id" id="marca_id" class="form-control" action>
                        <option value="0" selected disabled>--Selecccione--</option>
-                       <option value="1">Aun no definido</option>
+                       {% for marca in marcas %}
+                       <option value="{{marca.id}}">{{marca.marca}}</option>
+                       {% endfor %}
                      </select>
                    </div>
                    <div class="col-md-12">
@@ -114,6 +116,7 @@
                     <th  scope="col">Precio</th>
                     <th  scope="col">Categoria</th>
                     <th  scope="col">Utilidad</th>
+                    <th  scope="col">Imagen</th>
                     <th class="text-center" width="60">Editar</th>
                     <th class="text-center" width="60">Eliminar</th>
                   </tr>
@@ -128,6 +131,12 @@
                     <td>{{producto.precio}}</td>
                     <td>{{producto.caracteristica}}</td>
                     <td>{{producto.utilidad}}</td>
+                    {% if producto.url_imagen_producto %}
+                      <td scope="row"><img src="{{producto.url_imagen_producto}}" style="height: 50px; width: 50px;" alt="..."></td>
+                      <!--<td>{{producto.url_imagen_producto}}</td>-->
+                      {% else %}
+                      <td scope="row" ><img src="" style="height: 50px; width: 50px;" alt="no imagen"></td>
+                    {% endif %}
                     <td class="text-center"><button type="button" id="editButton{{producto.id}}}" class="btn btn-warning" onclick="show_modal('{{producto.id}}')"><i class="fas fa-edit"></i></button> </td>
                     <!--<td class="text-center"><a href="{% url 'rubro' id=producto.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a> </td>-->
                     <td class="text-center"><a href="{% url 'rubros-empresa-eliminar' id=producto.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
@@ -135,8 +144,6 @@
                   {% endfor %}
                 </tbody>
               </table>
-
-
             </div>
     			</div>
       </div>
@@ -145,10 +152,10 @@
      <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <form method="post" action="{% url 'actualizar_marca' %}">
+          <form method="post" action="{% url 'actualizar_producto' %}">
             {% csrf_token %}
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Editar marca</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Editar Producto</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -160,12 +167,15 @@
                     <label>Nombre del producto</label>
                     <input required type="text" name="nombre" class="form-control" value="">
                   </div>
+
                   <div class="col-md-12">
                     <label>Marca del producto</label>
-                    <select name="marca_id" id="marca_id" class="form-control">
-                      <option value="0" selected disabled>--Selecccione--</option>
-                      <option value="1">Aun no definido</option>
-                    </select>
+                    <select name="marca_id" id="marca_id" class="form-control" action>
+                       <option value="0" selected disabled>--Selecccione--</option>
+                       {% for marca in marcas %}
+                       <option value="{{marca.id}}">{{marca.marca}}</option>
+                       {% endfor %}
+                     </select>
                   </div>
                   <div class="col-md-12">
                    <label>Precio del producto</label>
@@ -208,7 +218,7 @@
 
      {% block javascript %}
      <script>
-       function show_modal (id) {              
+       function show_modal(id) {              
                url = "{% url 'actualizar_producto_datos' id=0 %}".replace('0',id);
                $.ajax({
                  url: url,

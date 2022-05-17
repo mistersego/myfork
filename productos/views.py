@@ -1,4 +1,7 @@
 
+import fileinput
+from stat import FILE_ATTRIBUTE_ARCHIVE
+from django.views import View
 from pkg_resources import require
 from .models import CategoriaProducto
 from .models import Producto
@@ -8,14 +11,17 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.urls import reverse
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 # Create your views here.
 
 def productos(request):
     productos=Producto.objects.all()
-    context ={'productos':productos}
+    marcas=Marca.objects.all()
+    context ={'productos':productos, 'marcas':marcas}
     return render(request,'productos/productos.html', context)
+
+    
 
 def actualizar_producto(request):
     producto = get_object_or_404(Producto, id=request.POST['id'])
@@ -55,7 +61,8 @@ def guardar_producto(request):
     utilidad_producto=request.POST['utilidad']
     descripcion_producto = request.POST['descripcion']
     garantia_producto = request.POST['garantia']
-    url_imagen_producto = request.POST['url_imagen_producto']
+    #url_imagen_producto = request.POST['fileinput']
+    url_imagen_producto = request.FILES['imagen']
     nombre_producto = request.POST['nombre']
 
     #producto = Producto.objects.filter(producto = nombre_producto)
@@ -65,10 +72,9 @@ def guardar_producto(request):
                                 url_imagen_producto= url_imagen_producto, nombre= nombre_producto )
     producto_nuevo.save()
     messages.success(request,'Producto agregado.', extra_tags='success')
-    return HttpResponse(request.META.get('HTTP_REFERER'))
+    return redirect('productos') #HttpResponse(request.META.get('HTTP_REFERER'))
 
     
-
     
    
         
