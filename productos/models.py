@@ -18,7 +18,7 @@ class CategoriaProducto(models.Model):
 
 class Producto(models.Model):
     id =models.AutoField(primary_key=True)
-    marca_id = models.CharField(max_length=50)
+    marca_id =  models.IntegerField(null=True)
     precio = models.CharField(max_length=10)
     caracteristica = models.BooleanField()
     color = models.CharField(max_length=10)
