@@ -36,12 +36,7 @@
               <a href="{% url 'create_proveedor' %}" class="btn btn-primary "> <i class="fas fa-plus"></i></a>
             </div>                  
           </div>
-          <div class="card-body">
-            {% comment %}
-              <div>
-              Columnas: <a class="toggle-vis" data-column="1">Proveedor</a> - <a class="toggle-vis" data-column="2">Compañía</a> 
-            </div>
-            {% endcomment %}
+          <div class="card-body">           
             <table id="table" class="table" width="100%" id="myTable">
               <thead>
                 <tr>
@@ -61,6 +56,8 @@
                   <td class="text-center"><a href="{% url 'update_proveedor' id=proveedor.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a> </td>              
                   <td class="text-center"><a href="{% url 'delete_proveedor' id=proveedor.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
                 </tr>            
+                {% empty %}
+                  <td colspan="5" class="text-center">No hay registros en la base de datos.</td>
                 {% endfor %}
               </tbody>
             </table>

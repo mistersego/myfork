@@ -22,5 +22,9 @@ urlpatterns = [
     path('proveedores/<int:proveedor_id>/personal/crear',views.crear_personal,name = 'create_personal'),
     path('proveedores/<int:proveedor_id>/personal/editar/<int:personal_id>',views.editar_personal,name = 'update_personal'),
     path('proveedores/<int:proveedor_id>/personal/eliminar/<int:personal_id>',views.eliminar_personal,name = 'delete_personal'),
-
+    #personal_clave
+    path('proveedores/<int:proveedor_id>/personal_clave',views.personal_clave_proveedor,name = 'personal_clave_proveedor'),
+    path('proveedores/<int:proveedor_id>/personal_clave/crear',views.crear_personal_clave,name = 'create_personal_clave'),
+    path('proveedores/<int:proveedor_id>/personal_clave/editar/<int:personal_clave_id>',views.editar_personal_clave,name = 'update_personal_clave'),
+    path('proveedores/<int:proveedor_id>/personal_clave/eliminar/<int:personal_clave_id>',views.eliminar_personal_clave,name = 'delete_personal_clave'),
 ]
