@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
+from productos.models import *
 
 def requisiciones(request):
     obj=Requisicion.objects.all()

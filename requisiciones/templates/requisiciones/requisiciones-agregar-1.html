@@ -34,9 +34,14 @@
                 <label>Fecha de requisición</label>
                 <input required type="date" name="fecha_req" class="form-control" value="">
               </div>
+       
               <div class="col-md-6">
                 <label>Nivel</label>
-                <input required type="text" name="nombre" class="form-control" value="">
+                <select name="nivel" id="nivel" class="form-control">
+                  {% for n in niveles %} 
+                  <option value="{{n.id}}">{{n.nivel}}</option>
+                  {% endfor %}
+                </select>
               </div>
 
               <div class="col-md-6">
