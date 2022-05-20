@@ -32,18 +32,16 @@ class Proveedor(models.Model):
     fax = models.CharField(max_length=100,null=True,default=None)
     movil = models.CharField(max_length=100,null=True,default=None)
     correo = models.CharField(max_length=100,null=True,default=None)
-    website = models.CharField(max_length=100,null=True,default=None)
-    #tipo_organizacion = models.ForeignKey(TipoOrganizacion, on_delete=models.CASCADE)#foreignkey agrega _id aparentemente
+    website = models.CharField(max_length=100,null=True,default=None)    
     tipo_organizacion_id = models.IntegerField(null=False)
     nit = models.CharField(max_length=100,null=False)
     nrc = models.CharField(max_length=100,null=True,default=None)
-    periodo_negocio = models.IntegerField(null=False,default=None)
-    #rubro_empresa = models.ForeignKey(RubroEmpresa,on_delete=models.CASCADE)#foreignkey agrega _id aparentemente
+    periodo_negocio = models.IntegerField(null=False,default=None)    
     rubro_empresa_id = models.IntegerField(null=False)
     estado = models.IntegerField(null=False,default=None)
     url_copia_autenticada = models.FileField(null=False, upload_to='copias_autenticadas/')
     razon_social =  models.CharField(max_length=200,null=True,default=None)
-    calificacion =  models.CharField(max_length=100,null=True,default=None)
+    calificacion =  models.CharField(max_length=1,default='A')
 
     def delete_file(self, *args, **kwargs):
         os.remove(os.path.join(settings.MEDIA_ROOT, self.url_copia_autenticada.name))
@@ -78,3 +76,15 @@ class Personal(models.Model):
 
     class Meta:
         db_table = "prove_personal"
+
+class PersonalClave(models.Model):
+    id = models.AutoField(primary_key=True,null=False)
+    nombre = models.CharField(max_length=200,null=False)
+    cargo = models.CharField(max_length=200,null=False)
+    firma = models.FileField(null=True,upload_to='firmas_personal_clave/')
+    proveedor_id = models.IntegerField(null=False)
+    class Meta:
+        db_table = "prove_personal_clave"
+
+    def delete_file(self, *args, **kwargs):
+        os.remove(os.path.join(settings.MEDIA_ROOT, self.firma.name))

@@ -47,7 +47,9 @@
                   <td class="text-center">{{per.tipo_personal}}</td>                
                   <td class="text-center"><a href="{% url 'update_personal' proveedor_id=proveedor.id personal_id=per.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a></td>
                   <td class="text-center"><a href="{% url 'delete_personal' proveedor_id=proveedor.id personal_id=per.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a></td>
-                </tr>            
+                </tr>      
+                {% empty %}
+                  <td colspan="5" class="text-center">No hay registros en la base de datos.</td>      
                 {% endfor %}
               </tbody>
             </table>

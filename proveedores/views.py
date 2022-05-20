@@ -102,7 +102,7 @@ def update_proveedor(request,id):
 
     if request.method == 'POST':
        
-        form = ProveedorForm(request.POST, request.FILES,instance=proveedor)
+        form = ProveedorEditForm(request.POST, request.FILES,instance=proveedor)
         if form.is_valid():                        
             
             try:
@@ -118,7 +118,7 @@ def update_proveedor(request,id):
         else:
             messages.success(request, 'Existen errores en el formulario.', extra_tags='danger')
     else:
-        form = ProveedorForm(instance=proveedor)
+        form = ProveedorEditForm(instance=proveedor)
 
     context = {'form':form}
     return render(request,"proveedores/edit_proveedor.html",context)
@@ -250,8 +250,6 @@ def crear_personal(request,proveedor_id):
         return render(request, "personal/create_personal.html", context)
 
 
-    
-
 def editar_personal(request,proveedor_id,personal_id):
     personal = get_object_or_404(Personal, id = personal_id)   
     proveedor = get_object_or_404(Proveedor,id = proveedor_id)  
@@ -300,7 +298,72 @@ def eliminar_personal(request,proveedor_id,personal_id):
 
 #---------------------------PERSONAL--------------------------------
 
+#----------------------PERSONAL CLAVE--------------------------------
 
 
 
-1
+#----------------------PERSONAL CLAVE--------------------------------
+def  personal_clave_proveedor(request,proveedor_id):
+    proveedor = get_object_or_404(Proveedor,id = proveedor_id)
+    personal_clave = PersonalClave.objects.filter(proveedor_id = proveedor_id)
+    context = {'proveedor':proveedor,'personal_clave':personal_clave}
+    return render(request,"personal_clave/personal_clave_proveedor.html",context)
+
+def crear_personal_clave(request,proveedor_id):
+    proveedor = get_object_or_404(Proveedor,id = proveedor_id)
+    if request.method == 'POST':
+        form = PersonalClaveForm(request.POST, request.FILES,initial={'proveedor_id':proveedor_id})
+        if form.is_valid():            
+            form.save()
+            messages.success(request, 'Personal clave agregado correctamente.', extra_tags='success')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        else:
+            messages.success(request, 'Existen errores en el formulario.', extra_tags='danger')
+            context = {'form':form,'proveedor':proveedor}
+            return render(request, "personal_clave/create_personal_clave.html", context)
+    else:
+        context = {'form':PersonalClaveForm(initial={'proveedor_id':proveedor_id}),'proveedor':proveedor}
+        return render(request, "personal_clave/create_personal_clave.html", context)
+
+
+def editar_personal_clave(request,proveedor_id,personal_clave_id):
+    proveedor = get_object_or_404(Proveedor, id = proveedor_id)
+    personal_clave = get_object_or_404(PersonalClave, id = personal_clave_id)
+    name = personal_clave.firma.name
+
+    if request.method == 'POST':
+       
+        form = PersonalClaveForm(request.POST, request.FILES,instance=personal_clave)
+        if form.is_valid():                        
+            
+            try:
+                file = request.FILES['firma'].name
+                os.remove(os.path.join(settings.MEDIA_ROOT, name))
+            except:
+                pass
+            
+            form.save()
+            messages.success(request, 'Personal clave editado correctamente.', extra_tags='success')  
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                    
+        else:
+            messages.success(request, 'Existen errores en el formulario.', extra_tags='danger')
+    else:
+        form = PersonalClaveForm(instance=personal_clave)
+
+    context = {'form':form,'proveedor':proveedor}
+    return render(request,"personal_clave/edit_personal_clave.html",context)
+
+def eliminar_personal_clave(request,proveedor_id,personal_clave_id):
+
+        try:
+            personal_clave = get_object_or_404(PersonalClave, id = personal_clave_id)
+            personal_clave.delete_file()
+            personal_clave.delete()
+            messages.success(request, 'Proveedor eliminado correctamente.', extra_tags='success')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))            
+            
+        except:
+            messages.success(request, 'Ha ocurrido un error.', extra_tags='danger')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
