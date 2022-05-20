@@ -1,6 +1,6 @@
 -- MySQL dump 10.19  Distrib 10.3.34-MariaDB, for debian-linux-gnu (x86_64)
 --
--- Host: localhost    Database: compras3
+-- Host: localhost    Database: compras
 -- ------------------------------------------------------
 -- Server version	10.3.34-MariaDB-0ubuntu0.20.04.1
 
@@ -114,6 +114,7 @@ CREATE TABLE `auth_user` (
   `is_staff` tinyint(1) NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `date_joined` datetime(6) NOT NULL,
+  `cargo_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -182,6 +183,57 @@ CREATE TABLE `auth_user_user_permissions` (
 LOCK TABLES `auth_user_user_permissions` WRITE;
 /*!40000 ALTER TABLE `auth_user_user_permissions` DISABLE KEYS */;
 /*!40000 ALTER TABLE `auth_user_user_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ctl_area`
+--
+
+DROP TABLE IF EXISTS `ctl_area`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ctl_area` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `area` varchar(200) NOT NULL,
+  `activo` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ctl_area`
+--
+
+LOCK TABLES `ctl_area` WRITE;
+/*!40000 ALTER TABLE `ctl_area` DISABLE KEYS */;
+INSERT INTO `ctl_area` VALUES (1,'Informatica',1),(2,'contabilidad',1);
+/*!40000 ALTER TABLE `ctl_area` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `ctl_cargo`
+--
+
+DROP TABLE IF EXISTS `ctl_cargo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ctl_cargo` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cargo` varchar(200) NOT NULL,
+  `area_id` int(11) NOT NULL,
+  `activo` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ctl_cargo`
+--
+
+LOCK TABLES `ctl_cargo` WRITE;
+/*!40000 ALTER TABLE `ctl_cargo` DISABLE KEYS */;
+INSERT INTO `ctl_cargo` VALUES (1,'Programador',1,1);
+/*!40000 ALTER TABLE `ctl_cargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -291,7 +343,7 @@ CREATE TABLE `django_session` (
 
 LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
-INSERT INTO `django_session` VALUES ('n8n898zmv8sgjaxtwb4h4rifoed1y519','e30:1nnqyP:DDhsXbbBm-9gSQlULNHXivnmjRKISs95jMH35zkm9Hs','2022-05-23 00:10:01.955807');
+INSERT INTO `django_session` VALUES ('3evv5arxohej1h9dbguzuuq1uxhb51fa','e30:1nrn45:Mvooj-YUbJzhypQF1TANNvP8i0FSK3I_hQVk075axhc','2022-06-02 20:48:09.817231'),('n8n898zmv8sgjaxtwb4h4rifoed1y519','e30:1nnqyP:DDhsXbbBm-9gSQlULNHXivnmjRKISs95jMH35zkm9Hs','2022-05-23 00:10:01.955807');
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -317,7 +369,7 @@ CREATE TABLE `pro_categoria_producto` (
 
 LOCK TABLES `pro_categoria_producto` WRITE;
 /*!40000 ALTER TABLE `pro_categoria_producto` DISABLE KEYS */;
-INSERT INTO `pro_categoria_producto` VALUES (1,'categoria a','45',0);
+INSERT INTO `pro_categoria_producto` VALUES (1,'categoria a','45',1);
 /*!40000 ALTER TABLE `pro_categoria_producto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -642,6 +694,133 @@ LOCK TABLES `prove_tipo_referencia` WRITE;
 INSERT INTO `prove_tipo_referencia` VALUES (1,'referencias comerciales'),(2,'referencias bancarias'),(3,'compañías en sus últimos cinco años');
 /*!40000 ALTER TABLE `prove_tipo_referencia` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `req_estado`
+--
+
+DROP TABLE IF EXISTS `req_estado`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `req_estado` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `estado` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `req_estado`
+--
+
+LOCK TABLES `req_estado` WRITE;
+/*!40000 ALTER TABLE `req_estado` DISABLE KEYS */;
+INSERT INTO `req_estado` VALUES (1,'Aprovada'),(2,'Rechazada'),(3,'Observaciones');
+/*!40000 ALTER TABLE `req_estado` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `req_nivel`
+--
+
+DROP TABLE IF EXISTS `req_nivel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `req_nivel` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nivel` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `req_nivel`
+--
+
+LOCK TABLES `req_nivel` WRITE;
+/*!40000 ALTER TABLE `req_nivel` DISABLE KEYS */;
+INSERT INTO `req_nivel` VALUES (1,'Alta'),(2,'Media'),(3,'Baja');
+/*!40000 ALTER TABLE `req_nivel` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `req_observaciones`
+--
+
+DROP TABLE IF EXISTS `req_observaciones`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `req_observaciones` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `requisicion_id` int(11) NOT NULL,
+  `observacion` text DEFAULT NULL,
+  `fecha` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `req_observaciones`
+--
+
+LOCK TABLES `req_observaciones` WRITE;
+/*!40000 ALTER TABLE `req_observaciones` DISABLE KEYS */;
+/*!40000 ALTER TABLE `req_observaciones` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `req_requisicion`
+--
+
+DROP TABLE IF EXISTS `req_requisicion`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `req_requisicion` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nivel_id` int(11) NOT NULL,
+  `jefe_id` int(11) NOT NULL,
+  `fecha_requisicion` date NOT NULL,
+  `usuario_id` int(11) NOT NULL,
+  `estado_id` int(11) NOT NULL,
+  `fecha_estimada` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `req_requisicion`
+--
+
+LOCK TABLES `req_requisicion` WRITE;
+/*!40000 ALTER TABLE `req_requisicion` DISABLE KEYS */;
+/*!40000 ALTER TABLE `req_requisicion` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `req_requisicion_producto`
+--
+
+DROP TABLE IF EXISTS `req_requisicion_producto`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `req_requisicion_producto` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `producto_id` int(11) NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `requisicion_id` int(11) NOT NULL,
+  `persona_autoriza_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `req_requisicion_producto`
+--
+
+LOCK TABLES `req_requisicion_producto` WRITE;
+/*!40000 ALTER TABLE `req_requisicion_producto` DISABLE KEYS */;
+/*!40000 ALTER TABLE `req_requisicion_producto` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -652,4 +831,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-05-19 17:37:46
+-- Dump completed on 2022-05-19 18:03:26
