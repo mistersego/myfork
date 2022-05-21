@@ -21,6 +21,15 @@
     </div>
 
     <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">{{req.fecha_requisicion}}</li>
+            <li class="list-group-item">A second item</li>
+            <li class="list-group-item">A third item</li>
+          </ul>
+        </div>
+      </div>
      <div class="col-md-12">
        {% include "message.html"  %}
        <div class="card">
@@ -40,26 +49,9 @@
                 <input required type="date" name="fecha_es" class="form-control" value="">
               </div>
        
-              <div class="col-md-6">
-                <label>Nivel</label>
-                <select name="nivel" id="nivel" class="form-control">
-                  {% for n in niveles %} 
-                  <option value="{{n.id}}">{{n.nivel}}</option>
-                  {% endfor %}
-                </select>
-              </div>
+         
 
-
-              <div class="col-md-6">
-                <label>Jefes</label>
-                <select name="jefe" id="jefe" class="form-control">
-                  {% for j in jefes %} 
-                  <option value="{{j.id}}">{{j.username}}</option>
-                  {% endfor %}
-                </select>
-              </div>
-
-
+             
               <div class="col-md-12">
                 <button type="submit" class="btn btn-primary" name="button"> <i class="fas fa-save"></i></button>
               </div>
