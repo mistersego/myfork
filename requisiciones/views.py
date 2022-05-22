@@ -1,8 +1,8 @@
 from pkg_resources import require
 from .models import Requisicion
 from .models import NivelRequisicion
-from .models import NivelRequisicion
 from .models import EstadoRequisicion
+from .models import RequisicionProducto
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
@@ -11,6 +11,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
+from productos.models import Producto
 
 def requisiciones(request):
     obj=Requisicion.objects.all()
@@ -41,11 +42,40 @@ def guardarRequisicion1( request): #requisicion parte 1
                 estado_id=4) #se debe cambiar ya que ahorita requerida es = 4 significa que se debe validar la requisicion
     req.save()
 
-    
     return HttpResponseRedirect('/requisiciones/crear2/'+str(req.id))
 
 
 def requisicionCrear2(request, id ):
     req=Requisicion.objects.get(pk=id)
-    context ={'req': req}
+    estado=EstadoRequisicion.objects.get(pk=req.estado_id)
+    nivel=NivelRequisicion.objects.get(pk=req.nivel_id)
+    productos = Producto.objects.all()
+    jefe=User.objects.get(pk=req.jefe_id)
+
+    sql = "SELECT rrp.cantidad ,rrp.id, rrp.producto_id , rrp.requisicion_id , pp.nombre FROM req_requisicion_producto rrp  INNER JOIN pro_producto pp ON rrp.producto_id  = pp.id where rrp.requisicion_id ="+str(id)+";";
+    detalles= RequisicionProducto.objects.raw(sql);
+    context ={'req': req, 'estado': estado,'nivel':nivel,'jefe': jefe, 'productos': productos,'id': id, "detalles": detalles}
     return render(request, 'requisiciones/requisiciones-agregar-2.html', context)
+
+
+def guardarDetalleRequisicion( request): 
+    #variables de request
+    producto =request.GET["producto"]
+    cantidad =request.GET["cantidad"]
+    id =request.GET["id"]
+    #variables de request
+
+    req = RequisicionProducto(producto_id=producto,
+                cantidad=cantidad,
+                requisicion_id=id)
+    req.save()
+    messages.success(request, 'Se ha agregado el detalle correctamente', extra_tags='success')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+def eliminarDetalleRequisicion(request, id):    
+  
+    detalle = RequisicionProducto.objects.get(id = id)
+    detalle.delete()
+    messages.success(request, 'Detalle eliminado correctamente.', extra_tags='success')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

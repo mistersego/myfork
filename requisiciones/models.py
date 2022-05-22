@@ -41,3 +41,20 @@ class EstadoRequisicion(models.Model):
         db_table = "req_estado"
 
 
+
+class RequisicionProducto(models.Model):
+    id =models.AutoField(primary_key=True)
+    producto_id= models.IntegerField(null=False)
+    cantidad= models.IntegerField(null=False)
+    requisicion_id= models.IntegerField(null=False)
+
+    def __str__(self):
+        return self.producto_id
+
+    class Meta:
+        db_table = "req_requisicion_producto"
+
+
+
+
+
