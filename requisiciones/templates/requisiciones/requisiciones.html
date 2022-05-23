@@ -47,6 +47,8 @@
                     <th  scope="col">Fecha de requisición</th>
                     <th  scope="col">Titulo</th>
                     <th  scope="col">Fecha de estimada</th>
+                    <th  scope="col">Nivel</th>
+                    <th  scope="col">Estado</th>
                     <th class="text-center" width="60">Editar</th>
                     <th class="text-center" width="60">Eliminar</th>
                   </tr>
@@ -58,8 +60,19 @@
                     <td>{{req.fecha_requisicion}}</td>
                     <td>Requisición Nº {{req.id}}</td>
                     <td> {{req.fecha_estimada}}</td>
+                    <td> {{req.nivel}}</td>
+                    <td> {{req.estado}}</td>
                     <td class="text-center"><a href="{% url 'rubro' id=req.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a> </td>
-                    <td class="text-center"><a href="{% url 'rubros-empresa-eliminar' id=req.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
+
+                    {% if  req.estado_id == "4" or req.estado_id == "3" %}
+                     <td class="text-center"><a href="{% url 'requisiciones-cancelar' id=req.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
+                    {% else %}
+                      <td class="text-center"> <button class="btn btn-danger" disabled ><i class="fas fa-trash"></i></button> </td>
+                    {% endif %}
+
+
+
+                    
                   </tr>
                   {% endfor %}
                 </tbody>

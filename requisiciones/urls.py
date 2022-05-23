@@ -8,8 +8,8 @@ urlpatterns = [
     path('requisiciones/guardar/detalle/producto',views.guardarDetalleRequisicion, name = "requisicion-guardar-detalle"),
     path('requisiciones/eliminar/detalle/<int:id>/',views.eliminarDetalleRequisicion, name = "requisicion-eliminar-detalle"),
     path('requisiciones/pendientes',views.requisicionesPorAprobar, name = "requisiciones-por-aprobar"),
-    
-      
+    path('requisiciones/cancelar/<int:id>/',views.cancelarRequisicion, name = "requisiciones-cancelar"),
+    path('requisiciones/evaluar/<int:id>/',views.evaluarRequisicion, name = "requisicion-evaluar"),
     #path('areas/save',views.guardarArea,name = "guardar-area"),
     # path('areas/cambioestado/<int:id>/',views.cambioEstadoArea, name="area-habilitado"),
     # path('areas/area/<int:id>/',views.obtenerArea, name="area"),
