@@ -23,12 +23,12 @@
      <div class="col-md-12 ">
        <!-- Button trigger modal -->
        <div class="text-right">
-         <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#exampleModal">
+        <button type="button" class="btn btn-primary " data-toggle="modal" data-target="#exampleModal">
            <i class="fas fa-save"></i>
          </button>
        </div>
        <!-- Modal -->
-        <form class="" action="{% url 'guardar_producto' %}" method="post">
+        <form class="" action="{% url 'guardar_producto' %}" method="post" id="formAddProd" enctype="multipart/form-data">
         {% csrf_token %}  
          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
          <div class="modal-dialog" role="document">
@@ -44,14 +44,26 @@
                    <div class="col-md-12">
                      <label>Nombre del producto</label>
                      <input required type="text" name="nombre" class="form-control" value="">
-                   </div>
+                   </div>                   
                    <div class="col-md-12">
                      <label>Marca del producto</label>
-                     <select name="marca_id" id="marca_id" class="form-control">
+                     <select name="marca_id" id="marca_id" class="form-control" action>
                        <option value="0" selected disabled>--Selecccione--</option>
-                       <option value="1">Aun no definido</option>
+                       {% for marca in marcas %}
+                       <option value="{{marca.id}}">{{marca.marca}}</option>
+                       {% endfor %}
                      </select>
                    </div>
+                   <div class="col-md-12">
+                    <label>Categoría del producto</label>
+                    <select name="categoria_id" id="categoria_id" class="form-control" action>
+                      <option value="0" selected disabled>--Selecccione--</option>
+                      {% for categoria in categorias %}
+                      <option value="{{categoria.id}}">{{categoria.nombre}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+
                    <div class="col-md-12">
                     <label>Precio del producto</label>
                     <input required type="number" formtarget="$###,###.##" name="precio" class="form-control" value="">
@@ -78,7 +90,7 @@
                   </div>
                   <div class="col-md-12">
                     <label>Imagen del producto</label>
-                    <input required type="file" name="imagen" class="form-control" value=""></textarea>
+                    <input required type="file" name="imagen" id="imagen" class="form-control" value=""></textarea>
                   </div>
                 
                  </div>
@@ -110,10 +122,13 @@
                     <th width="20" scope="col">#</th>
                     <th  scope="col">Nombre</th>
                     <th  scope="col">ID marca</th>
+                    <th  scope="col">ID categoria</th>
+                    <th  scope="col">ID Proveedor</th>
                     <th  scope="col">Descripcion</th>
                     <th  scope="col">Precio</th>
-                    <th  scope="col">Categoria</th>
+                    <th  scope="col">Característica</th>
                     <th  scope="col">Utilidad</th>
+                    <th  scope="col">Imagen</th>
                     <th class="text-center" width="60">Editar</th>
                     <th class="text-center" width="60">Eliminar</th>
                   </tr>
@@ -124,19 +139,25 @@
                     <th scope="row">{{forloop.counter}}</th>
                     <td>{{producto.nombre}}</td>
                     <td>{{producto.marca_id}}</td>
+                    <td></td>
+                    <td></td>
                     <td>{{producto.descripcion}}</td>
                     <td>{{producto.precio}}</td>
                     <td>{{producto.caracteristica}}</td>
                     <td>{{producto.utilidad}}</td>
+                    {% if producto.url_imagen_producto %}
+                      <td scope="row"><img src="../{{producto.url_imagen_producto}}" style="height: 50px; width: 50px;" alt="..."></td>
+                      <!--<td>{{producto.url_imagen_producto}}</td>-->
+                      {% else %}
+                      <td scope="row" ><img src="" style="height: 50px; width: 50px;" alt="no imagen"></td>
+                    {% endif %}
                     <td class="text-center"><button type="button" id="editButton{{producto.id}}}" class="btn btn-warning" onclick="show_modal('{{producto.id}}')"><i class="fas fa-edit"></i></button> </td>
                     <!--<td class="text-center"><a href="{% url 'rubro' id=producto.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a> </td>-->
-                    <td class="text-center"><a href="{% url 'rubros-empresa-eliminar' id=producto.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
+                    <td class="text-center"><a href="{% url 'eliminar_producto' id=producto.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
                   </tr>
                   {% endfor %}
                 </tbody>
               </table>
-
-
             </div>
     			</div>
       </div>
@@ -145,10 +166,10 @@
      <div class="modal fade" id="EditModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <form method="post" action="{% url 'actualizar_marca' %}">
+          <form method="post" action="{% url 'actualizar_producto' %}">
             {% csrf_token %}
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Editar marca</h5>
+              <h5 class="modal-title" id="exampleModalLabel">Editar Producto</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -158,43 +179,59 @@
                   <input type="text" name="id" id="id" hidden>
                   <div class="col-md-12">
                     <label>Nombre del producto</label>
-                    <input required type="text" name="nombre" class="form-control" value="">
+                    <input required type="text" name="nombre" id="nombre" class="form-control">
                   </div>
                   <div class="col-md-12">
+                    <label>Descripción</label>
+                    <input required type="text" name="descripcion" id="descripcion" class="form-control" >
+                  </div>
+                  <!-- <div class="col-md-12">
                     <label>Marca del producto</label>
-                    <select name="marca_id" id="marca_id" class="form-control">
-                      <option value="0" selected disabled>--Selecccione--</option>
-                      <option value="1">Aun no definido</option>
+                    <select name="marca_id" id="marca_id" class="form-control" action>
+                      <option value="0" selected disabled>----</option>
+                      {% for marca in marcas %}
+                      <option value="{{marca.id}}">{{marca.marca}}</option>
+                      {% endfor %}
                     </select>
                   </div>
                   <div class="col-md-12">
-                   <label>Precio del producto</label>
-                   <input required type="number" formtarget="$###,###.##" name="precio" class="form-control" value="">
-                 </div>
+                   <label>Categoría del producto</label>
+                   <select name="categoria_id" id="categoria_id" class="form-control" action>
+                     <option value="0" selected disabled>--Selecccione--</option>
+                     {% for categoria in categorias %}
+                     <option value="{{categoria.id}}">{{categoria.nombre}}</option>
+                     {% endfor %}
+                   </select>
+                 </div> -->
                  <div class="col-md-12">
-                   <label>Característica del producto</label>
-                   <input required type="text" name="caracteristica" class="form-control" value="">
-                 </div>
-                 <div class="col-md-12">
-                   <label>Color del producto</label>
-                   <input required type="text" name="color" class="form-control" value="">
-                 </div>
-                 <div class="col-md-12">
-                   <label>Utilidad del producto</label>
-                   <input required type="text" name="utilidad" class="form-control" value="">
-                 </div>
-                 <div class="col-md-12">
-                   <label>Descripción del producto</label>
-                   <textarea required type="text" name="descripcion" class="form-control" value=""></textarea>
-                 </div>
-                 <div class="col-md-12">
-                   <label>Garantia del producto</label>
-                   <textarea required type="text" name="garantia" class="form-control" value=""></textarea>
-                 </div>
-                 <div class="col-md-12">
-                   <label>Imagen del producto</label>
-                   <input required type="file" name="imagen" class="form-control" value=""></textarea>
-                 </div>
+                  <label>Precio del producto</label>
+                  <input required type="number" formtarget="$###,###.##" name="precio" id="precio" class="form-control" value="">
+                </div>
+                <div class="col-md-12">
+                  <label>Característica del producto</label>
+                  <input required type="text" name="caracteristica" id="caracteristica" class="form-control" value="">
+                </div>
+                <div class="col-md-12">
+                  <label>Color del producto</label>
+                  <input required type="text" name="color" id="color" class="form-control" value="">
+                </div>
+                <div class="col-md-12">
+                  <label>Utilidad del producto</label>
+                  <input required type="text" name="utilidad" id="utilidad" class="form-control" value="">
+                </div>
+                <div class="col-md-12">
+                  <label>Descripción del producto</label>
+                  <input required type="text" name="descripcion" id="descripcion" class="form-control"/>
+                </div>
+                <div class="col-md-12">
+                  <label>Garantia del producto</label>
+                  <input required type="text" name="garantia" id="garantia" class="form-control"/>
+                </div>
+                <!-- <div class="col-md-12">
+                  <label>Imagen del producto</label>
+                  <input required type="file" name="imagen" id="url_imagen_producto" class="form-control" value=""></textarea>
+                </div> -->
+
                 </div>
             </div>
             <div class="modal-footer">
@@ -208,7 +245,7 @@
 
      {% block javascript %}
      <script>
-       function show_modal (id) {              
+       function show_modal(id) {              
                url = "{% url 'actualizar_producto_datos' id=0 %}".replace('0',id);
                $.ajax({
                  url: url,

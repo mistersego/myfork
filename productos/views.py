@@ -3,73 +3,79 @@ from pkg_resources import require
 from .models import CategoriaProducto
 from .models import Producto
 from .models import Marca
+#from .models import Proveedor
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.urls import reverse
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 # Create your views here.
 
 def productos(request):
     productos=Producto.objects.all()
     marcas=Marca.objects.all()
+    categorias = CategoriaProducto.objects.all()
+    #proveedores= Prov 
     categorias=CategoriaProducto.objects.all()
     context ={'productos':productos , 'categorias': categorias , 'marcas': marcas   }
     return render(request,'productos/productos.html', context)
 
 def actualizar_producto(request):
     producto = get_object_or_404(Producto, id=request.POST['id'])
-    productos = Producto.objects.filter(producto = request.POST['producto']).exclude(id = request.POST['id']).count()
 
-    if productos > 0:
-        messages.success(request, 'Ya existe una marca con el nombre ingresado.', extra_tags='danger')
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    else:
-        producto.marca_id = request.POST['marca_id']
-        producto.descripcion = request.POST['descripcion']
-        producto.nombre= request.POST['nombre']
-        producto.color= request.POST['color']
-        producto.garantia=request.POST['garantia']
-        producto.utilidad=request.POST['utilidad']
-        producto.caracteristica=request.POST['caracteristica']
-        producto.precio=request.POST['precio']
-        producto.url_imagen_producto=request.POST['url_imagen_producto']
-        producto.save()
-        
-        messages.success(request, 'Marca actualizada correctamente.', extra_tags='success')
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    #producto.marca_id = request.POST['marca_id']
+    #producto.categoria_id=request.POST['categoria_id']
+    producto.descripcion = request.POST['descripcion']
+    producto.nombre= request.POST['nombre']
+    producto.color= request.POST['color']
+    producto.garantia=request.POST['garantia']
+    producto.utilidad=request.POST['utilidad']
+    producto.caracteristica=request.POST['caracteristica']
+    producto.precio=request.POST['precio']
+    #producto.url_imagen_producto=request.FILE['url_imagen_producto']
+    producto.save()
+    
+    messages.success(request, 'Marca actualizada correctamente.', extra_tags='success')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 def actualizar_producto_datos(request,id):
     producto = get_object_or_404(Producto, id=id)
     json_response = JsonResponse({'id':producto.id,'nombre':producto.nombre,'descripcion':producto.descripcion,'caracteristica':producto.caracteristica,
     'precio':producto.precio,'garantia':producto.garantia,'color':producto.color, 'utilidad':producto.utilidad,
-    'url_imagen_producto':producto.url_imagen_producto, 'marca_id':producto.marca_id})
+   })
+    # 'url_imagen_producto':producto.url_imagen_producto, 'marca_id':producto.marca_id, 'categoria_id':producto.categoria_id
     return json_response
 
 def guardar_producto(request):
     id_marca = request.POST['marca_id']
+    id_categoria =request.POST['categoria_id']
+    #id_proveedor = request.POST['proveedor_id']
     precio_producto = request.POST['precio']
     caracteristica_producto= request.POST['caracteristica']
     color_producto = request.POST['color']
     utilidad_producto=request.POST['utilidad']
     descripcion_producto = request.POST['descripcion']
     garantia_producto = request.POST['garantia']
-    url_imagen_producto = request.POST['url_imagen_producto']
+    url_imagen_producto = request.FILES['imagen']
     nombre_producto = request.POST['nombre']
 
     #producto = Producto.objects.filter(producto = nombre_producto)
     #producto_marca = Producto.objects.filter(producto_marca = id_marca)
-    producto_nuevo = Producto(marca_id =  id_marca, precio = precio_producto, caracteristica = caracteristica_producto,
+    producto_nuevo = Producto(marca_id =  id_marca, categoria_id=id_categoria, precio = precio_producto, caracteristica = caracteristica_producto,
                                 color= color_producto, utilidad = utilidad_producto,descripcion= descripcion_producto, garantia= garantia_producto,
                                 url_imagen_producto= url_imagen_producto, nombre= nombre_producto )
     producto_nuevo.save()
     messages.success(request,'Producto agregado.', extra_tags='success')
-    return HttpResponse(request.META.get('HTTP_REFERER'))
+    return redirect('productos') #HttpResponse(request.META.get('HTTP_REFERER'))
 
-    
+def eliminar_producto(request, id):    
+    producto = Producto.objects.get(id = id)
+    producto.delete()
+    messages.success(request, 'Producto eliminado correctamente.', extra_tags='success')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))   
 
     
    
