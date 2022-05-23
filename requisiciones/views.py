@@ -111,3 +111,13 @@ def evaluarRequisicion(request, id ):
     detalles= RequisicionProducto.objects.raw(sql);
     context ={'req': req, 'estado': estado,'nivel':nivel,'jefe': jefe, 'productos': productos,'id': id, "detalles": detalles}
     return render(request, 'requisiciones/requisicion-aprobar.html', context)
+
+
+
+def cambioDeEstadoRequisicion(request, id):
+    req = get_object_or_404(Requisicion, id=id)
+
+    req.estado_id = 5
+    req.save()
+    messages.success(request, 'Requisición ha sido cancelada  correctamente.', extra_tags='success')
+    return HttpResponseRedirect('/requisiciones/pendientes/')

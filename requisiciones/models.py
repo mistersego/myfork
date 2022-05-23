@@ -58,3 +58,14 @@ class RequisicionProducto(models.Model):
 
 
 
+class RequisicionObservacion(models.Model):
+    id =models.AutoField(primary_key=True)
+    requisicion_id= models.IntegerField(null=False)
+    observacion= models.CharField(max_length=300)
+    fecha= models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.requisicion_id
+
+    class Meta:
+        db_table = "req_observacion"
