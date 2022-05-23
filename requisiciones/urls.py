@@ -7,7 +7,7 @@ urlpatterns = [
     path('requisiciones/crear2/<int:id>/',views.requisicionCrear2, name = "requisicion-crear2"),
     path('requisiciones/guardar/detalle/producto',views.guardarDetalleRequisicion, name = "requisicion-guardar-detalle"),
     path('requisiciones/eliminar/detalle/<int:id>/',views.eliminarDetalleRequisicion, name = "requisicion-eliminar-detalle"),
-
+    path('requisiciones/pendientes',views.requisicionesPorAprobar, name = "requisiciones-por-aprobar"),
     
       
     #path('areas/save',views.guardarArea,name = "guardar-area"),

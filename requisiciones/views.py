@@ -14,9 +14,14 @@ from django.http import HttpResponseRedirect
 from productos.models import Producto
 
 def requisiciones(request):
-    obj=Requisicion.objects.all()
+    obj=Requisicion.objects.all() #modificar a razon que aparezcan las requisiciones que yo he realziado como uusaurio
     context ={'requisiciones':obj}
     return render(request, 'requisiciones/requisiciones.html', context)
+
+def requisicionesPorAprobar(request):
+    obj=Requisicion.objects.all() #modificar a razon que aparezcan las requisiciones que se aprueban por un jefe.
+    context ={'requisiciones':obj}
+    return render(request, 'requisiciones/requisiciones-por-aprobar.html', context)
 
 
 def requisicionCrear(request):
@@ -74,7 +79,6 @@ def guardarDetalleRequisicion( request):
 
 
 def eliminarDetalleRequisicion(request, id):    
-  
     detalle = RequisicionProducto.objects.get(id = id)
     detalle.delete()
     messages.success(request, 'Detalle eliminado correctamente.', extra_tags='success')

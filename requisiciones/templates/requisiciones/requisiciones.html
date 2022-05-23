@@ -44,7 +44,9 @@
                 <thead>
                   <tr>
                     <th width="20" scope="col">#</th>
-                    <th  scope="col">Nombre</th>
+                    <th  scope="col">Fecha de requisición</th>
+                    <th  scope="col">Titulo</th>
+                    <th  scope="col">Fecha de estimada</th>
                     <th class="text-center" width="60">Editar</th>
                     <th class="text-center" width="60">Eliminar</th>
                   </tr>
@@ -53,7 +55,9 @@
                   {% for req in requisiciones %} 
                   <tr>
                     <th scope="row">{{forloop.counter}}</th>
-                    <td>{{rubro.rubro}}</td>
+                    <td>{{req.fecha_requisicion}}</td>
+                    <td>Requisición Nº {{req.id}}</td>
+                    <td> {{req.fecha_estimada}}</td>
                     <td class="text-center"><a href="{% url 'rubro' id=req.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a> </td>
                     <td class="text-center"><a href="{% url 'rubros-empresa-eliminar' id=req.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
                   </tr>

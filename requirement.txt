@@ -7,6 +7,8 @@
 //requerimientos
 pip install python-decouple
 pip install mysqlclient
+python -m pip install Pillow
+
 
 
 leer si falla mysqlclient 
