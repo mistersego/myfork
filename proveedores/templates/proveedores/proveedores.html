@@ -15,16 +15,6 @@
     </div>
 </nav>
 {% include "message.html"  %}
-{% comment %}
-  <div class="row">
-    <div class="col-md-12 ">
-      <!-- Button trigger modal -->
-      <div class="text-right">
-        <a href="{% url 'create_proveedor' %}" class="btn btn-primary "> <i class="fas fa-plus"></i></a>
-      </div>         
-    </div>
-  </div>
-  {% endcomment %}
   <div class="row">  
     <div class="col-md-12">
       <div class="card">
@@ -33,8 +23,9 @@
               <h5 class="card-title mb-4"><strong>Proveedores</strong></h5>
             </div>
             <div class="col text-right">
-              <a href="{% url 'create_proveedor' %}" class="btn btn-primary "> <i class="fas fa-plus"></i></a>
-            </div>                  
+              <a href="{% url 'create_proveedor' %}" class="btn btn-primary "> <i class="fas fa-plus"></i></a>              
+              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#reportModal"><i class="fas fa-file-pdf"></i></button>
+            </div>                              
           </div>
           <div class="card-body">           
             <table id="table" class="table" width="100%" id="myTable">
@@ -66,6 +57,107 @@
     </div>
   </div>
     
+  <form class="" target="_blank" action="{% url 'report_proveedores' %}" method="post">
+    {% csrf_token %}
+      <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Generar reporte de proveedores</h5>            
+            </div>
+            <div class="modal-body">
+              <p><strong>Campos requeridos</strong></p>             
+                <div class="row">                     
+                  <div class="col-md-6">
+                    <input type="checkbox" id="calificacion" name="parametros" value="calificacion">
+                    <label>Calificación</label>                
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="representante_legal" name="parametros" value="representante_legal">
+                    <label>Representante Legal</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="compania" name="parametros" value="compania">
+                    <label>Compañía</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="direccion_organizacion" name="parametros" value="direccion_organizacion">
+                    <label>Dirección</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="telefono" name="parametros" value="telefono">
+                    <label>Teléfono</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="fax" name="parametros" value="fax">
+                    <label>Fax</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="movil" name="parametros" value="movil">
+                    <label>Móvil</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="correo" name="parametros" value="correo">
+                    <label>Correo electrónico</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="website" name="parametros" value="website">
+                    <label>Sitio web</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="tipo_organizacion" name="parametros" value="tipo">
+                    <label>Tipo de organización</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="nit" name="parametros" value="nit">
+                    <label>NIT</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="nrc" name="parametros" value="nrc">
+                    <label>NRC</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="periodo" name="parametros"  value="periodo_negocio">
+                    <label>Periodo</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="estado" name="parametros" value="estado">
+                    <label>Estado</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="rubro" name="parametros" value="rubro">
+                    <label>Rubro</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="razon_social" name="parametros" value="razon_social">
+                    <label>Razón Social</label>
+                  </div>
+                  <div class="col-md-12">
+                    <p><strong>Orden de listado</strong></p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <input type="radio" id="asc" checked name="order" value="ASC">
+                        <label>Ascedente</label>
+                      </div>
+                      <div class="col-md-6">
+                        <input type="radio" id="desc" name="order" value="DESC">
+                        <label>Descedente</label>
+                      </div> 
+                    </div>             
+                  </div>
+                  
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Salir</button>
+              <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+
     {% block javascript %}
         <script>
             $(document).ready(function() {

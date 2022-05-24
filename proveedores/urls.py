@@ -12,6 +12,8 @@ urlpatterns = [
     path('proveedores/<int:id>',views.detalle_proveedor, name = "detail_proveedor"),
     path('proveedores/<int:id>/eliminar',views.eliminar_proveedor, name = "delete_proveedor"),
     path('proveedores/<int:id>/editar',views.update_proveedor, name = "update_proveedor"),
+    path('proveedores/reporte_general',views.report_proveedores, name = "report_proveedores"),
+    path('proveedores/<int:id>/reporte',views.report_proveedor, name = "report_proveedor"),
     #referencias
     path('proveedores/<int:proveedor_id>/referencias',views.referencias_proveedor,name = 'referencias_proveedor'),
     path('proveedores/<int:proveedor_id>/referencias/crear',views.crear_referencia,name = 'create_referencia'),

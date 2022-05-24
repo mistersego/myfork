@@ -1,0 +1,31 @@
+{% extends "reporte_base.html" %}
+{% block content %}
+<h3 class="text-center">Reporte de información de proveedores</h3>
+<div class=" row text-right">
+    <div class="col-12">
+        Generado: {{fecha}}
+    </div>
+</div>
+<br>
+<div>
+    {% for proveedor in proveedores %}         
+        <div>
+            <h3>Proveedor {{proveedor.proveedor}}</h3>
+        </div>
+        <br>
+        <table id="table" class="table">
+            {% for key,value in proveedor.items %}
+                <tr>        
+                    {% if key != 'proveedor'%}
+                        <th>{{key}}</th>
+                        <td>{{value}}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}      
+        </table>
+        {% if not forloop.last %}
+            <div style="page-break-before: always;"></div>
+        {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

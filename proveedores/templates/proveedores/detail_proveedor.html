@@ -30,9 +30,10 @@
                 <div class=" col text-right">                    
                     <a href="{% url 'update_proveedor' id=proveedor.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a>        
                     <a href="{% url 'delete_proveedor' id=proveedor.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                    <a href="{% url 'report_proveedor' id=proveedor.id %}" target="_blank" class="btn btn-info "> <i class="fas fa-file-pdf"></i></a>
                 </div>
                 
-            </div>
+          </div>
           <div class="card-body">          
             <table id="table" class="table" width="100%" id="myTable">
               <thead>

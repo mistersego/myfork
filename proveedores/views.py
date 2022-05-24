@@ -1,4 +1,3 @@
-from multiprocessing import context
 import os
 from django.shortcuts import get_object_or_404, render
 from .models import RubroEmpresa, TipoOrganizacion, Proveedor
@@ -10,6 +9,7 @@ from django.contrib import messages
 from django.urls import reverse
 from .forms import *
 from django.db import connection
+
 
 def rubrosEmpresas(request):
     rubros=RubroEmpresa.objects.all()
@@ -123,6 +123,109 @@ def update_proveedor(request,id):
     context = {'form':form}
     return render(request,"proveedores/edit_proveedor.html",context)
 
+
+from django.http import HttpResponse
+from django.template.loader import get_template
+from datetime import date 
+from weasyprint import HTML, CSS
+from django.template.loader import render_to_string
+
+#import os
+#os.add_dll_directory(r"C:\Program Files\GTK3-Runtime Win64\bin")
+
+def report_proveedor(request,id):
+    
+    proveedor = Proveedor.objects.raw('select * from ((prove_proveedor as pp inner join prove_tipo_organizacion as pto on pp.tipo_organizacion_id = pto.id) inner join prove_rubro_empresa as pre on pp.rubro_empresa_id = pre.id) WHERE pp.id = %s;',[id])    
+    context = {'proveedor': proveedor[0],'pagesize':'A4','fecha':date.today()}
+    template_path = 'proveedores/reportes/report_proveedor.html'
+    html = render_to_string(template_path, context)
+
+    response = HttpResponse(content_type="application/pdf")
+    response["Content-Disposition"] = "inline;nuevo.pdf"
+    
+    HTML(string=html,base_url=request.build_absolute_uri()).write_pdf(response)
+
+    return response
+
+def report_proveedores(request):
+    
+    try:            
+        parametros = request.POST.getlist('parametros')
+        orden = request.POST.getlist('order')
+        parametros_query = ""
+        all_fields = 0
+        len_parametros = len(parametros)
+        if  len_parametros> 0:
+            for p in parametros:
+                    parametros_query = parametros_query+p+"," 
+            parametros_query = parametros_query[0:-1]
+        else:
+            all_fields = 1
+                            
+        with connection.cursor() as cursor:     
+            cursor.callproc('sp_PROVEEDORES_REPORT',[parametros_query,orden,all_fields])
+            
+            columnas = [x[0] for x in cursor.description]
+
+            for i in range( len(columnas)):
+                if columnas[i] == "website":
+                    columnas[i] = "Sitio Web"
+                if columnas[i] == "tipo":
+                    columnas[i] = "Tipo de Organización"
+                if columnas[i] == "telefono":
+                    columnas[i] = "Teléfono"
+                if columnas[i] == "movil":
+                    columnas[i] = "Móvil"
+                if columnas[i] == "fax":
+                    columnas[i] = "Fax"
+                if columnas[i] == "correo":
+                    columnas[i] = "Correo Electrónico"
+                if columnas[i] == "compania":
+                    columnas[i] = "Compañía"
+                if columnas[i] == "rubro":
+                    columnas[i] = "Rubro"
+                if columnas[i] == "estado":
+                    columnas[i] = "Estado"
+                if columnas[i] == "periodo_negocio":
+                    columnas[i] = "Periodo"
+                if columnas[i] == "nit":
+                    columnas[i] = "NIT"                
+                if columnas[i] == "nrc":
+                    columnas[i] = "NRC"                
+                if columnas[i] == "id":
+                    columnas[i] = "ID"                
+                if columnas[i] == "calificacion":
+                    columnas[i] = "Calificación"            
+                if columnas[i] == "representante_legal":
+                    columnas[i] = "Representante Legal"                
+                if columnas[i] == "direccion_organizacion":
+                    columnas[i] = "Dirección Organización"                
+                if columnas[i] == "razon_social":
+                    columnas[i] = "Razón Social"                
+                    
+            records = cursor.fetchall()    
+            
+            proveedores = []
+
+            for row in records:
+                proveedores.append(dict(zip(columnas, row)))
+
+            context = {'proveedores': proveedores,'pagesize':'A4','fecha':date.today()}
+            template_path = 'proveedores/reportes/report_proveedores.html'
+            html = render_to_string(template_path, context)
+
+            response = HttpResponse(content_type="application/pdf")
+            response["Content-Disposition"] = "inline;Proveedores.pdf"
+            
+            HTML(string=html,base_url=request.build_absolute_uri()).write_pdf(response)
+                        
+
+            return response
+        
+    except:
+        messages.success(request, 'Error en la ejecución del procedimiento.', extra_tags='danger') 
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    
 #------------------------PROVEEDORES--------------------------------
 
 #------------------------REFERENCIAS--------------------------------

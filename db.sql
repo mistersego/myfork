@@ -1126,3 +1126,26 @@ END $$
 
 DELIMITER ;
 
+DELIMITER $$
+
+CREATE OR REPLACE PROCEDURE sp_PROVEEDORES_REPORT(IN p_parametros VARCHAR(400),
+IN p_orden VARCHAR(4), IN p_all_fields TINYINT)
+
+BEGIN
+
+	IF p_all_fields = 0 THEN
+
+	SET @str := CONCAT('SELECT ','pp.id,proveedor,',p_parametros,' from ((prove_proveedor as pp inner join prove_tipo_organizacion as pto on pp.tipo_organizacion_id = pto.id) inner join prove_rubro_empresa as pre on pp.rubro_empresa_id = pre.id)
+	 ORDER BY proveedor ',p_orden,';');
+   PREPARE stmt FROM @str;
+   EXECUTE stmt;
+   
+   ELSE
+   
+		select * from ((prove_proveedor as pp inner join prove_tipo_organizacion as pto on pp.tipo_organizacion_id = pto.id) inner join prove_rubro_empresa as pre on pp.rubro_empresa_id = pre.id);
+	
+	END IF;
+	
+END $$
+
+DELIMITER ;
