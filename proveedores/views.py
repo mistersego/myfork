@@ -9,6 +9,10 @@ from django.contrib import messages
 from django.urls import reverse
 from .forms import *
 from django.db import connection
+from django.template.loader import get_template
+from datetime import date 
+from weasyprint import HTML, CSS
+from django.template.loader import render_to_string
 
 
 def rubrosEmpresas(request):
@@ -122,13 +126,6 @@ def update_proveedor(request,id):
 
     context = {'form':form}
     return render(request,"proveedores/edit_proveedor.html",context)
-
-
-from django.http import HttpResponse
-from django.template.loader import get_template
-from datetime import date 
-from weasyprint import HTML, CSS
-from django.template.loader import render_to_string
 
 #import os
 #os.add_dll_directory(r"C:\Program Files\GTK3-Runtime Win64\bin")
