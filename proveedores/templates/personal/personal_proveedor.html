@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<nav>
+  <div class="row">
+    <!-- /# column -->
+    <div class="col-lg-12 p-l-0 ">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="/">Home</a>
+        </li>
+        <li class="breadcrumb-item"><a href="{% url 'proveedores' %}">Proveedores</a></li>                  
+        <li class="breadcrumb-item"><a href="{% url 'detail_proveedor' id=proveedor.id %}">Detalles de {{proveedor.proveedor}}</a></li>
+        <li class="breadcrumb-item active"  aria-current="page">Personal</li>                    
+      </ol>
+    </div>
+</nav>
+{% include "message.html"  %}
+  <div class="row">  
+    <div class="col-md-12">
+      <div class="card">
+          <div class="row">
+            <div>
+              <h5 class="card-title mb-4"><strong>Personal de {{proveedor.proveedor}}</strong></h5>
+            </div>
+            <div class="col text-right">
+              <a href="{% url 'create_personal' proveedor_id=proveedor.id %}" class="btn btn-primary "> <i class="fas fa-plus"></i></a>
+            </div>                  
+          </div>
+          <div class="card-body">           
+            <table id="table" class="table" width="100%" id="myTable">
+              <thead>
+                <tr>
+                  <th width="10" scope="col">#</th>            
+                  <th class="text-center" width="120">Nombre</th>                  
+                  <th class="text-center" width="60">Tipo</th>
+                  <th class="text-center" width="30">Editar</th>
+                  <th class="text-center" width="30">Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for per in personal %} 
+                <tr>
+                  <th scope="row">{{forloop.counter}}</th>
+                  <td class="text-center">{{per.nombre}}</td>
+                  <td class="text-center">{{per.tipo_personal}}</td>                
+                  <td class="text-center"><a href="{% url 'update_personal' proveedor_id=proveedor.id personal_id=per.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a></td>
+                  <td class="text-center"><a href="{% url 'delete_personal' proveedor_id=proveedor.id personal_id=per.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a></td>
+                </tr>      
+                {% empty %}
+                  <td colspan="5" class="text-center">No hay registros en la base de datos.</td>      
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+  </div>
+    
+    {% block javascript %}
+        <script>
+            $(document).ready(function() {
+                  var table = $('#table').DataTable( {
+                      "scrollY": "300px",
+                      "scrollX": true,
+                      "paging": false
+                  } );
+              
+                  $('a.toggle-vis').on( 'click', function (e) {
+                      e.preventDefault();
+              
+                      // Get the column API object
+                      var column = table.column( $(this).attr('data-column') );
+              
+                      // Toggle the visibility
+                      column.visible( ! column.visible() );
+                  } );
+              } );  
+        </script>
+    {% endblock javascript %}   
+
+{% endblock %}

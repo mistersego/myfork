@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+      <div class="row">
+        <!-- /# column -->
+        <div class="col-lg-12 p-l-0 title-margin-left">
+            <div class="page-header">
+                <div class="page-title">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">Home</a>
+                        </li>
+                        <li class="breadcrumb-item active">Requisiciones por aprobar</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!-- /# column -->
+      </div>
+
+
+
+     <div class="row">
+      {% include "message.html"  %}
+
+      <div class="col-md-12">
+        <div class="card">
+    				<div class="">
+    			  	<h5 class="card-title mb-4"><strong>Requisiciones</strong></h5>
+    				</div>
+    				<div class="card-body">
+              <table class="table" id="myTable">
+                <thead>
+                  <tr>
+                    <th width="20" scope="col">#</th>
+                    <th  scope="col">Fecha de requisición</th>
+                    <th  scope="col">Titulo</th>
+                    <th  scope="col">Fecha de estimada</th>
+                    <th  scope="col">Nivel</th>
+                    <th  scope="col">Estado</th>
+                    <th class="text-center" width="60">revisar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for req in requisiciones %} 
+                  <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{req.fecha_requisicion}}</td>
+                    <td>Requisición Nº {{req.id}}</td>
+                    <td> {{req.fecha_estimada}}</td>
+                    <td> {{req.nivel}}</td>
+                    <td> {{req.estado}}</td>
+
+                    <td class="text-center"><a href="{% url 'requisicion-evaluar' id=req.id %}" class="btn btn-success"><i class="fas fa-eye"></i></a> </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+
+
+            </div>
+    			</div>
+      </div>
+     </div>
+{% endblock %}

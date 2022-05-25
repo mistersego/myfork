@@ -1,0 +1,99 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<nav>
+  <div class="row">
+    <!-- /# column -->
+    <div class="col-lg-12 p-l-0 ">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="/">Home</a>
+        </li>
+        <li class="breadcrumb-item"><a href="{% url 'proveedores' %}">Proveedores</a></li>                  
+        <li class="breadcrumb-item"><a href="{% url 'detail_proveedor' id=proveedor.id %}">Detalles de {{proveedor.proveedor}}</a></li>
+        <li class="breadcrumb-item active"  aria-current="page">Referencias</li>                    
+      </ol>
+    </div>
+</nav>
+{% include "message.html"  %}
+{% comment %}
+  <div class="row">
+    <div class="col-md-12 ">
+      <!-- Button trigger modal -->
+      <div class="text-right">
+        <a href="{% url 'create_referencia' %}" class="btn btn-primary "> <i class="fas fa-plus"></i></a>
+      </div>         
+    </div>
+  </div>
+  {% endcomment %}
+  <div class="row">  
+    <div class="col-md-12">
+      <div class="card">
+          <div class="row">
+            <div>
+              <h5 class="card-title mb-4"><strong>Referencias de {{proveedor.proveedor}}</strong></h5>
+            </div>
+            <div class="col text-right">
+              <a href="{% url 'create_referencia' proveedor_id=proveedor.id %}" class="btn btn-primary "> <i class="fas fa-plus"></i></a>
+            </div>                  
+          </div>
+          <div class="card-body">           
+            <table id="table" class="table" width="100%" id="myTable">
+              <thead>
+                <tr>
+                  <th width="10" scope="col">#</th>
+                  <th class="text-center" width="90" scope="col">Referencia</th>
+                  <th class="text-center" width="60">Contacto</th>
+                  <th class="text-center" width="50">Teléfono</th>
+                  <th class="text-center" width="40">Valor</th>
+                  <th class="text-center" width="60">Tipo</th>
+                  <th class="text-center" width="60">Editar</th>
+                  <th class="text-center" width="60">Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for ref in referencias %} 
+                <tr>
+                  <th scope="row">{{forloop.counter}}</th>
+                  <td class="text-center">{{ref.nombre_referencia}}</td>
+                  <td class="text-center">{{ref.nombre_contacto}}</td>
+                  <td class="text-center">{{ref.telefono_contacto}}</td>
+                  <td class="text-center">{{ref.valor}}</td>
+                  <td class="text-center">{{ref.referencia}}</td>                  
+                  <td class="text-center"><a href="{% url 'update_referencia' proveedor_id=proveedor.id referencia_id=ref.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a></td>
+                  <td class="text-center"><a href="{% url 'delete_referencia' proveedor_id=proveedor.id referencia_id=ref.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a></td>
+                </tr>            
+                {% empty %}
+                  <td colspan="8" class="text-center">No hay registros en la base de datos.</td>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+  </div>
+    
+    {% block javascript %}
+        <script>
+            $(document).ready(function() {
+                  var table = $('#table').DataTable( {
+                      "scrollY": "300px",
+                      "scrollX": true,
+                      "paging": false
+                  } );
+              
+                  $('a.toggle-vis').on( 'click', function (e) {
+                      e.preventDefault();
+              
+                      // Get the column API object
+                      var column = table.column( $(this).attr('data-column') );
+              
+                      // Toggle the visibility
+                      column.visible( ! column.visible() );
+                  } );
+              } );  
+        </script>
+    {% endblock javascript %}   
+
+{% endblock %}

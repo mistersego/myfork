@@ -1,0 +1,189 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+<div class="row">
+  <!-- /# column -->
+  <div class="col-lg-12 p-l-0 title-margin-left">
+      <div class="page-header">
+          <div class="page-title">
+              <ol class="breadcrumb">
+                  <li class="breadcrumb-item">
+                      <a href="/">Home</a>
+                  </li>
+                  <li class="breadcrumb-item active">Proveedores</li>
+              </ol>
+          </div>
+      </div>
+  </div>
+  <!-- /# column -->
+</div>
+
+
+{% include "message.html"  %}
+  <div class="row">  
+    <div class="col-md-12">
+      <div class="card">
+          <div class="row">
+            <div>
+              <h5 class="card-title mb-4"><strong>Proveedores</strong></h5>
+            </div>
+            <div class="col text-right">
+              <a href="{% url 'create_proveedor' %}" class="btn btn-primary "> <i class="fas fa-plus"></i></a>              
+              <button type="button" class="btn btn-info" data-toggle="modal" data-target="#reportModal"><i class="fas fa-file-pdf"></i></button>
+            </div>                              
+          </div>
+          <div class="card-body">           
+            <table  class="table" width="100%" id="myTable">
+              <thead>
+                <tr>
+                  <th width="20" scope="col">#</th>
+                  <th  scope="col">Proveedor</th>                 
+                  <th class="text-center" width="60">Detalles</th>
+                  <th class="text-center" width="60">Editar</th>
+                  <th class="text-center" width="60">Eliminar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for proveedor in proveedores %} 
+                <tr>
+                  <th scope="row">{{forloop.counter}}</th>
+                  <td>{{proveedor.proveedor}}</td>
+                  <td class="text-center"><a href="{% url 'detail_proveedor' id=proveedor.id %}" class="btn btn-info"> <i class="fas fa-eye"></i></a></td>
+                  <td class="text-center"><a href="{% url 'update_proveedor' id=proveedor.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a> </td>              
+                  <td class="text-center"><a href="{% url 'delete_proveedor' id=proveedor.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
+                </tr>            
+                {% empty %}
+                  <td colspan="5" class="text-center">No hay registros en la base de datos.</td>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+    </div>
+  </div>
+    
+  <form class="" target="_blank" action="{% url 'report_proveedores' %}" method="post">
+    {% csrf_token %}
+      <div class="modal fade" id="reportModal" tabindex="-1" role="dialog" aria-labelledby="reportLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Generar reporte de proveedores</h5>            
+            </div>
+            <div class="modal-body">
+              <p><strong>Campos requeridos</strong></p>             
+                <div class="row">                     
+                  <div class="col-md-6">
+                    <input type="checkbox" id="calificacion" name="parametros" value="calificacion">
+                    <label>Calificación</label>                
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="representante_legal" name="parametros" value="representante_legal">
+                    <label>Representante Legal</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="compania" name="parametros" value="compania">
+                    <label>Compañía</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="direccion_organizacion" name="parametros" value="direccion_organizacion">
+                    <label>Dirección</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="telefono" name="parametros" value="telefono">
+                    <label>Teléfono</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="fax" name="parametros" value="fax">
+                    <label>Fax</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="movil" name="parametros" value="movil">
+                    <label>Móvil</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="correo" name="parametros" value="correo">
+                    <label>Correo electrónico</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="website" name="parametros" value="website">
+                    <label>Sitio web</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="tipo_organizacion" name="parametros" value="tipo">
+                    <label>Tipo de organización</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="nit" name="parametros" value="nit">
+                    <label>NIT</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="nrc" name="parametros" value="nrc">
+                    <label>NRC</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="periodo" name="parametros"  value="periodo_negocio">
+                    <label>Periodo</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="estado" name="parametros" value="estado">
+                    <label>Estado</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="rubro" name="parametros" value="rubro">
+                    <label>Rubro</label>
+                  </div>
+                  <div class="col-md-6">
+                    <input type="checkbox" id="razon_social" name="parametros" value="razon_social">
+                    <label>Razón Social</label>
+                  </div>
+                  <div class="col-md-12">
+                    <p><strong>Orden de listado</strong></p>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <input type="radio" id="asc" checked name="order" value="ASC">
+                        <label>Ascedente</label>
+                      </div>
+                      <div class="col-md-6">
+                        <input type="radio" id="desc" name="order" value="DESC">
+                        <label>Descedente</label>
+                      </div> 
+                    </div>             
+                  </div>
+                  
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Salir</button>
+              <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+
+    {% block javascript %}
+        <script>
+            $(document).ready(function() {
+                  var table = $('#table').DataTable( {
+                      "scrollY": "300px",
+                      "scrollX": true,
+                      "paging": false
+                  } );
+              
+                  $('a.toggle-vis').on( 'click', function (e) {
+                      e.preventDefault();
+              
+                      // Get the column API object
+                      var column = table.column( $(this).attr('data-column') );
+              
+                      // Toggle the visibility
+                      column.visible( ! column.visible() );
+                  } );
+              } );  
+        </script>
+    {% endblock javascript %}   
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "reporte_base.html" %}
+{% block content %}
+<h3 class="text-center">Reporte de información de proveedor {{proveedor.proveedor}}</h3>
+<div class=" row text-right">
+    <div class="col-12">
+        Generado: {{fecha}}
+    </div>
+</div>
+<br>
+<div>
+    <table id="table" class="table">
+        <tbody>               
+            <tr>        
+                <th>Calificación</th>           
+                <td class="table-info">{{proveedor.calificacion}}</td>             
+                <th>Compañía</th>
+                <td>{{proveedor.compania}}</td>
+            </tr>              
+            <tr>
+                <th>Representante Legal</th>
+                <td>{{proveedor.representante_legal}}</td> 
+                <th>Dirección</th>
+                <td>{{proveedor.direccion_organizacion}}</td>
+            </tr>               
+            <tr>
+                <th>Teléfono</th>
+                <td>{{proveedor.telefono}}</td>
+                <th>Fax</th>
+                <td>{{proveedor.fax}}</td>
+            </tr>
+            
+            <tr>
+                <th>Móvil</th>
+                <td>{{proveedor.movil}}</td>
+                <th>Correo Electrónico</th>   
+                <td>{{proveedor.correo}}</td>
+            </tr>
+        
+            <tr>
+                <th>Sitio Web</th>
+                <td>{{proveedor.website}}</td>
+                <th>Tipo Organización</th>
+                <td>{{proveedor.tipo}}</td>
+            </tr>               
+            <tr>
+                <th>NIT</th>
+                <td style="font-size: 90%;">{{proveedor.nit}}</td>
+                <th>NRC</th>
+                <td>{{proveedor.nrc}}</td>
+            </tr>               
+            <tr>
+                <th>Periodo Negocio</th>
+                <td>{{proveedor.periodo_negocio}}</td>
+                <th>Rubro Empresa</th>
+                <td>{{proveedor.rubro}}</td>
+            </tr>                
+            <tr>
+                <th>Estado</th>
+                <td>{{proveedor.estado}}</td>
+                <th>Razón Social</th>
+                <td>{{proveedor.razon_social}}</td>
+            </tr>      
+        </tbody>
+    </table>
+</div>
+{% endblock %}

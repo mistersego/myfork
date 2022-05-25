@@ -1,0 +1,86 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+
+
+    <div class="row">
+      <!-- /# column -->
+      <div class="col-lg-12 p-l-0 title-margin-left">
+          <div class="page-header">
+              <div class="page-title">
+                  <ol class="breadcrumb">
+                      <li class="breadcrumb-item">
+                          <a href="{% url 'requisiciones' %}">Requisiciones</a>
+                      </li>
+                      <li class="breadcrumb-item active">Aprobar requisición</li>
+                  </ol>
+              </div>
+          </div>
+      </div>
+      <!-- /# column -->
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <h5>REQUISICION Nº {{req.id}}</h5>
+        <div class="card">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">FECHA DE REQUISICION: {{req.fecha_requisicion}}</li>
+            <li class="list-group-item">FECHA ESTIMADA: {{req.fecha_estimada}}</li>
+            <li class="list-group-item">ESTADO: {{estado.estado}}</li>
+            <li class="list-group-item">NIVEL: {{nivel.nivel}}</li>
+            <li class="list-group-item">JEFE ASIGNADO: {{jefe.first_name}} {{jefe.last_name}}</li>
+          </ul>
+        </div>
+      </div>
+     <div class="col-md-12">
+       {% include "message.html"  %}
+       <div class="card">
+        <div class="card-header " >
+          <h6> <strong>Detalle de requisición</strong></h6>
+        </div>
+        <div class="card-body">
+
+
+            <table class="table" ><!--id="myTable"-->
+                <thead>
+                  <tr>
+                    <th width="20" scope="col">#</th>
+                    <th  scope="col">producto</th>
+                    <th  scope="col">proveedor</th>
+                    <th  width="200">cantidad</th>
+                    <th class="text-center" width="60">Eliminar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for detalle in detalles %}
+                  <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{detalle.nombre}}</td>
+                    <td>{{detalle.proveedor}}</td>
+                    <td>{{detalle.cantidad}}</td>
+                    <td class="text-center"><a href="{% url 'requisicion-eliminar-detalle' id=detalle.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <br>
+      
+              <a href="{%url 'requisiciones'%}" class="btn btn-success">FINALIZAR</a>
+              <a href="{%url 'requisiciones'%}" class="btn btn-danger">RECHAZAR</a>
+              <hr>
+              <form action="">
+                <label for="">Observación</label>
+                <textarea name="observacion" class="form-control"  cols="50" ></textarea>
+                <BUTTON class="btn btn-warning" type="submit">FINALIZAR CON OBSERVACIONES</BUTTON>
+              </form>
+            
+              
+      
+          
+        </div>
+      </div>
+
+     </div>
+     </div>
+{% endblock %}
