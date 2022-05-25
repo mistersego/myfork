@@ -120,8 +120,7 @@ def cambioDeEstadoRequisicion(request, id):
     req.save()
 
     obs = request.GET["observacion"]
-    if obs !=null:
+  
        
-
     messages.success(request, 'Requisición ha sido cancelada  correctamente.', extra_tags='success')
     return HttpResponseRedirect('/requisiciones/pendientes/')

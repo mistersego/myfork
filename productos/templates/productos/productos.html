@@ -121,13 +121,8 @@
                   <tr>
                     <th width="20" scope="col">#</th>
                     <th  scope="col">Nombre</th>
-                    <th  scope="col">ID marca</th>
-                    <th  scope="col">ID categoria</th>
-                    <th  scope="col">ID Proveedor</th>
-                    <th  scope="col">Descripcion</th>
                     <th  scope="col">Precio</th>
                     <th  scope="col">Característica</th>
-                    <th  scope="col">Utilidad</th>
                     <th  scope="col">Imagen</th>
                     <th class="text-center" width="60">Editar</th>
                     <th class="text-center" width="60">Eliminar</th>
@@ -138,15 +133,11 @@
                   <tr>
                     <th scope="row">{{forloop.counter}}</th>
                     <td>{{producto.nombre}}</td>
-                    <td>{{producto.marca_id}}</td>
-                    <td></td>
-                    <td></td>
-                    <td>{{producto.descripcion}}</td>
                     <td>{{producto.precio}}</td>
                     <td>{{producto.caracteristica}}</td>
                     <td>{{producto.utilidad}}</td>
                     {% if producto.url_imagen_producto %}
-                      <td scope="row"><img src="../{{producto.url_imagen_producto}}" style="height: 50px; width: 50px;" alt="..."></td>
+                      <td scope="row"><img src="../media/{{producto.url_imagen_producto}}" style="height: 50px; width: 50px;" alt="..."></td>
                       <!--<td>{{producto.url_imagen_producto}}</td>-->
                       {% else %}
                       <td scope="row" ><img src="" style="height: 50px; width: 50px;" alt="no imagen"></td>
