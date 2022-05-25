@@ -12,12 +12,21 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 import os
 from pathlib import Path
+<<<<<<< HEAD
 from decouple import config
+=======
+from django.urls import reverse_lazy
+from decouple import config
+import logging
+>>>>>>> miguel
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> miguel
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -47,7 +56,9 @@ INSTALLED_APPS = [
     'proveedores.apps.ProveedoresConfig',
     'catalogos.apps.CatalogosConfig',
     'requisiciones.apps.RequisicionesConfig',
-    'usuarios.apps.UsuariosConfig'
+    'usuarios.apps.UsuariosConfig',
+    'users.apps.UsersConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -126,6 +137,11 @@ USE_I18N = True
 
 USE_TZ = True
 
+LOGIN_REDIRECT_URL = reverse_lazy('home')
+LOGOUT_REDIRECT_URL = reverse_lazy('')
+
+LOGIN_URL = 'login'
+LOGOUT_URL = 'logout'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -140,3 +156,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+# For debugging 
+if DEBUG:
+    # will output to your console
+    logging.basicConfig(
+        level = logging.DEBUG,
+        format = '%(asctime)s %(levelname)s %(message)s',
+    )
+else:
+    # will output to logging file
+    logging.basicConfig(
+        level = logging.DEBUG,
+        format = '%(asctime)s %(levelname)s %(message)s',
+        filename = '/my_log_file.log',
+        filemode = 'a'
+    )

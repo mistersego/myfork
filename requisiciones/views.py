@@ -116,8 +116,12 @@ def evaluarRequisicion(request, id ):
 
 def cambioDeEstadoRequisicion(request, id):
     req = get_object_or_404(Requisicion, id=id)
-
-    req.estado_id = 5
+    req.estado_id = request.GET["estado"]
     req.save()
+
+    obs = request.GET["observacion"]
+    if obs !=null:
+       
+
     messages.success(request, 'Requisición ha sido cancelada  correctamente.', extra_tags='success')
     return HttpResponseRedirect('/requisiciones/pendientes/')

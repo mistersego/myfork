@@ -122,8 +122,34 @@
                         </ul>
                     </li>
                     <li>
+<<<<<<< HEAD
                         <a href="app-event-calender.html">
                             <i class="ti-calendar"></i> Opcion estatica </a>
+=======
+
+                        <ul>
+                            <li>
+                                <a href="{% url 'areas' %}">Areas</a>
+                            </li>
+                        </ul>
+
+
+                        <li>
+                            <a class="sidebar-sub-toggle">
+                                <i class="ti-bar-chart-alt"></i> Listado de Usuarios
+                                <span class="sidebar-collapse-icon ti-angle-down"></span>
+                            </a>
+                            <ul>
+                                <li>
+                                    <a href="{% url 'home_users' %}">Usuarios</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'home_roles' %}">Roles</a>
+                                </li>
+                             
+                            </ul>
+                        </li>
+>>>>>>> miguel
                     </li>
 
 
@@ -146,7 +172,8 @@
 
                     <li class="label">Extra</li>
                     <li>
-                        <a><i class="ti-close"></i> Logout</a>
+                        
+                        <a href="{% url 'logout' %}"><i class="ti-close"></i> Logout</a>
                     </li>
                 </ul>
             </div>
@@ -236,7 +263,7 @@
                         </div>
                         <div class="dropdown dib">
                             <div class="header-icon" data-toggle="dropdown">
-                                <span class="user-avatar">John
+                                <span class="user-avatar">{{ user.username | upper }}</span>
                                     <i class="ti-angle-down f-s-10"></i>
                                 </span>
                                 <div class="drop-down dropdown-profile dropdown-menu dropdown-menu-right">
@@ -273,9 +300,10 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#">
+                                                
+                                                <a href="{% url 'logout' %}">
                                                     <i class="ti-power-off"></i>
-                                                    <span>Logout</span>
+                                                   Logout
                                                 </a>
                                             </li>
                                         </ul>

@@ -1,0 +1,35 @@
+{% extends 'layout.html' %} {% block content %}
+
+<div class="row">
+  {% comment %} {% include "message.html" %} {% endcomment %}
+
+  <div class="col-md-12">
+    <div class="card">
+      <div class="">
+        <h5 class="card-title mb-4"><strong>items</strong></h5>
+      </div>
+      <div class="card-body">
+        <table class="table" id="myTable">
+          <thead>
+            <tr>
+              <th width="20" scope="col">#</th>
+              <th scope="col">Nombre</th>
+              <th class="text-center" width="60">Eliminar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in listado %}
+            <tr>
+              <th scope="row">{{forloop.counter}}</th>
+              <td>{{item.name}}</td>
+              <td><button class="btn btn-sm btn-danger">Eliminar</button></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}
