@@ -68,4 +68,4 @@ class RequisicionObservacion(models.Model):
         return self.requisicion_id
 
     class Meta:
-        db_table = "req_observacion"
+        db_table = "req_observaciones"

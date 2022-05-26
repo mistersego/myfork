@@ -31,8 +31,16 @@
             <li class="list-group-item">NIVEL: {{nivel.nivel}}</li>
             <li class="list-group-item">JEFE ASIGNADO: {{jefe.first_name}} {{jefe.last_name}}</li>
           </ul>
+
+          <hr>
+          <h4>Observaciones</h4>
+          {% for ob in observaciones %}
+          <li class="list-group-item">{{ob.fecha}}: {{ob.observacion}}</li> 
+          <br>
+          {% endfor %}
         </div>
       </div>
+      
      <div class="col-md-12">
        {% include "message.html"  %}
        <div class="card">
@@ -47,29 +55,32 @@
                   <tr>
                     <th width="20" scope="col">#</th>
                     <th  scope="col">producto</th>
-                    <th  scope="col">proveedor</th>
-                    <th  width="200">cantidad</th>
-                    <th class="text-center" width="60">Eliminar</th>
+                    <th  width="100">cantidad</th>
+                    <th  width="150">imagen</th>
                   </tr>
                 </thead>
                 <tbody>
                   {% for detalle in detalles %}
                   <tr>
                     <th scope="row">{{forloop.counter}}</th>
-                    <td>{{detalle.nombre}}</td>
-                    <td>{{detalle.proveedor}}</td>
+                    <td>{{detalle.nombre}} -{{detalle.caracteristica}} </td>
                     <td>{{detalle.cantidad}}</td>
-                    <td class="text-center"><a href="{% url 'requisicion-eliminar-detalle' id=detalle.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
+                    {% if detalle.url_imagen_producto %}
+                    <td scope="row"><img src="../../../media/{{detalle.url_imagen_producto}}" style="height: 50px; width: 50px;" alt="..."></td>
+                    {% else %}
+                    <td scope="row" ><img src="" style="height: 50px; width: 50px;" alt="no imagen"></td>
+                    {% endif %}
+                    
                   </tr>
                   {% endfor %}
                 </tbody>
               </table>
               <br>
       
-              <a href="{%url 'requisiciones'%}" class="btn btn-success">FINALIZAR</a>
-              <a href="{%url 'requisiciones'%}" class="btn btn-danger">RECHAZAR</a>
+              <a href="{% url 'requisicion-evaluar-final' id=req.id estado=1 %}" class="btn btn-success">FINALIZAR</a>
+              <a href="{% url 'requisicion-evaluar-final' id=req.id estado=2 %}" class="btn btn-danger">RECHAZAR</a>
               <hr>
-              <form action="">
+              <form action="{% url 'requisicion-evaluar-final' id=req.id estado=3 %}">
                 <label for="">Observación</label>
                 <textarea name="observacion" class="form-control"  cols="50" ></textarea>
                 <BUTTON class="btn btn-warning" type="submit">FINALIZAR CON OBSERVACIONES</BUTTON>

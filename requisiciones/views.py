@@ -12,6 +12,9 @@ from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from productos.models import Producto
+from datetime import datetime
+from .models import RequisicionObservacion
+
 
 def requisiciones(request):
     query = 'select rr.id, rr.nivel_id, rr.jefe_id, rr.fecha_requisicion , rr.fecha_estimada , rr.usuario_id , rr.estado_id , rn.nivel, re.estado    from req_requisicion rr inner join req_nivel rn on rr.nivel_id  = rn.id inner join req_estado re  on rr.estado_id  = re.id' 
@@ -58,9 +61,10 @@ def requisicionCrear2(request, id ):
     nivel=NivelRequisicion.objects.get(pk=req.nivel_id)
     productos = Producto.objects.all()
     jefe=User.objects.get(pk=req.jefe_id)
+    
 
-    sql = "SELECT rrp.cantidad ,rrp.id, rrp.producto_id , rrp.requisicion_id , pp.nombre FROM req_requisicion_producto rrp  INNER JOIN pro_producto pp ON rrp.producto_id  = pp.id where rrp.requisicion_id ="+str(id)+";";
-    detalles= RequisicionProducto.objects.raw(sql);
+    sql = "SELECT rrp.cantidad ,rrp.id, rrp.producto_id , rrp.requisicion_id , pp.nombre, pp.url_imagen_producto, pp.caracteristica FROM req_requisicion_producto rrp  INNER JOIN pro_producto pp ON rrp.producto_id  = pp.id where rrp.requisicion_id ="+str(id)+";";
+    detalles= RequisicionProducto.objects.raw(sql)
     context ={'req': req, 'estado': estado,'nivel':nivel,'jefe': jefe, 'productos': productos,'id': id, "detalles": detalles}
     return render(request, 'requisiciones/requisiciones-agregar-2.html', context)
 
@@ -106,21 +110,24 @@ def evaluarRequisicion(request, id ):
     nivel=NivelRequisicion.objects.get(pk=req.nivel_id)
     productos = Producto.objects.all()
     jefe=User.objects.get(pk=req.jefe_id)
+    query = "select * from req_observaciones where requisicion_id = "+str(req.id);
+    observaciones=RequisicionObservacion.objects.raw(query)
 
-    sql = "SELECT rrp.cantidad ,rrp.id, rrp.producto_id , rrp.requisicion_id , pp.nombre ,  pp2.proveedor  FROM req_requisicion_producto rrp  INNER JOIN pro_producto pp ON rrp.producto_id  = pp.id INNER JOIN prove_proveedor pp2 ON pp.proveedor_id  = pp2.id where rrp.requisicion_id ="+str(id)+";";
+    sql = "SELECT rrp.cantidad ,rrp.id, rrp.producto_id , rrp.requisicion_id , pp.nombre , pp.url_imagen_producto, pp.caracteristica FROM req_requisicion_producto rrp  INNER JOIN pro_producto pp ON rrp.producto_id  = pp.id  where rrp.requisicion_id ="+str(id)+";";
     detalles= RequisicionProducto.objects.raw(sql);
-    context ={'req': req, 'estado': estado,'nivel':nivel,'jefe': jefe, 'productos': productos,'id': id, "detalles": detalles}
+    context ={'req': req, 'estado': estado,'nivel':nivel,'jefe': jefe, 'productos': productos,'id': id, "detalles": detalles, "observaciones": observaciones}
     return render(request, 'requisiciones/requisicion-aprobar.html', context)
 
 
 
-def cambioDeEstadoRequisicion(request, id):
+def cambioDeEstadoRequisicion(request, id, estado):
     req = get_object_or_404(Requisicion, id=id)
-    req.estado_id = request.GET["estado"]
+    req.estado_id = estado
     req.save()
+    if estado==3:
+     ob=   request.GET["observacion"]
+     obre =RequisicionObservacion(requisicion_id=id, observacion=ob, fecha= datetime.today().strftime('%Y-%m-%d')  )
+     obre.save()
 
-    obs = request.GET["observacion"]
-  
-       
-    messages.success(request, 'Requisición ha sido cancelada  correctamente.', extra_tags='success')
-    return HttpResponseRedirect('/requisiciones/pendientes/')
+    messages.success(request, 'Requisición ha sido evaluada correctamente.', extra_tags='success')
+    return HttpResponseRedirect('/requisiciones/pendientes')

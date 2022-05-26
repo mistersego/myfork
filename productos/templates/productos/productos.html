@@ -121,9 +121,9 @@
                   <tr>
                     <th width="20" scope="col">#</th>
                     <th  scope="col">Nombre</th>
-                    <th  scope="col">Precio</th>
+                    <th  width="100" scope="col">Precio</th>
                     <th  scope="col">Característica</th>
-                    <th  scope="col">Imagen</th>
+                    <th width="100"  scope="col">Imagen</th>
                     <th class="text-center" width="60">Editar</th>
                     <th class="text-center" width="60">Eliminar</th>
                   </tr>
@@ -135,7 +135,7 @@
                     <td>{{producto.nombre}}</td>
                     <td>{{producto.precio}}</td>
                     <td>{{producto.caracteristica}}</td>
-                    <td>{{producto.utilidad}}</td>
+                
                     {% if producto.url_imagen_producto %}
                       <td scope="row"><img src="../media/{{producto.url_imagen_producto}}" style="height: 50px; width: 50px;" alt="..."></td>
                       <!--<td>{{producto.url_imagen_producto}}</td>-->

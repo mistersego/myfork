@@ -10,6 +10,9 @@ urlpatterns = [
     path('requisiciones/pendientes',views.requisicionesPorAprobar, name = "requisiciones-por-aprobar"),
     path('requisiciones/cancelar/<int:id>/',views.cancelarRequisicion, name = "requisiciones-cancelar"),
     path('requisiciones/evaluar/<int:id>/',views.evaluarRequisicion, name = "requisicion-evaluar"),
+    path('requisiciones/evaluar/final/<int:id>/<int:estado>',views.cambioDeEstadoRequisicion, name = "requisicion-evaluar-final"),
+
+    
     #path('areas/save',views.guardarArea,name = "guardar-area"),
     # path('areas/cambioestado/<int:id>/',views.cambioEstadoArea, name="area-habilitado"),
     # path('areas/area/<int:id>/',views.obtenerArea, name="area"),
