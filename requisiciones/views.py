@@ -17,13 +17,13 @@ from .models import RequisicionObservacion
 
 
 def requisiciones(request):
-    query = 'select rr.id, rr.nivel_id, rr.jefe_id, rr.fecha_requisicion , rr.fecha_estimada , rr.usuario_id , rr.estado_id , rn.nivel, re.estado    from req_requisicion rr inner join req_nivel rn on rr.nivel_id  = rn.id inner join req_estado re  on rr.estado_id  = re.id' 
+    query = 'select rr.id, rr.nivel_id, rr.jefe_id, rr.fecha_requisicion , rr.fecha_estimada , rr.usuario_id , rr.estado_id , rn.nivel, re.estado    from req_requisicion rr inner join req_nivel rn on rr.nivel_id  = rn.id inner join req_estado re  on rr.estado_id  = re.id where rr.usuario_id='+str(request.user.id ) 
     obj=Requisicion.objects.raw(query)#modificar a razon que aparezcan las requisiciones que yo he realziado como uusaurio
     context ={'requisiciones':obj}
     return render(request, 'requisiciones/requisiciones.html', context)
 
 def requisicionesPorAprobar(request):
-    query = 'select rr.id, rr.nivel_id, rr.jefe_id, rr.fecha_requisicion , rr.fecha_estimada , rr.usuario_id , rr.estado_id , rn.nivel, re.estado    from req_requisicion rr inner join req_nivel rn on rr.nivel_id  = rn.id inner join req_estado re  on rr.estado_id  = re.id where re.id=3 or re.id=4 or re.id=5' 
+    query = 'select rr.id, rr.nivel_id, rr.jefe_id, rr.fecha_requisicion , rr.fecha_estimada , rr.usuario_id , rr.estado_id , rn.nivel, re.estado    from req_requisicion rr inner join req_nivel rn on rr.nivel_id  = rn.id inner join req_estado re  on rr.estado_id  = re.id where re.id=3 or re.id=4 or re.id=5 and  rr.usuario_id='+str(request.user.id ) 
     obj=Requisicion.objects.raw(query) #modificar a razon que aparezcan las requisiciones que se aprueban por un jefe.
     context ={'requisiciones':obj}
     return render(request, 'requisiciones/requisiciones-por-aprobar.html', context)
