@@ -23,7 +23,7 @@ def requisiciones(request):
     return render(request, 'requisiciones/requisiciones.html', context)
 
 def requisicionesPorAprobar(request):
-    query = 'select rr.id, rr.nivel_id, rr.jefe_id, rr.fecha_requisicion , rr.fecha_estimada , rr.usuario_id , rr.estado_id , rn.nivel, re.estado    from req_requisicion rr inner join req_nivel rn on rr.nivel_id  = rn.id inner join req_estado re  on rr.estado_id  = re.id where re.id=3 or re.id=4' 
+    query = 'select rr.id, rr.nivel_id, rr.jefe_id, rr.fecha_requisicion , rr.fecha_estimada , rr.usuario_id , rr.estado_id , rn.nivel, re.estado    from req_requisicion rr inner join req_nivel rn on rr.nivel_id  = rn.id inner join req_estado re  on rr.estado_id  = re.id where re.id=3 or re.id=4 or re.id=5' 
     obj=Requisicion.objects.raw(query) #modificar a razon que aparezcan las requisiciones que se aprueban por un jefe.
     context ={'requisiciones':obj}
     return render(request, 'requisiciones/requisiciones-por-aprobar.html', context)
@@ -94,7 +94,7 @@ def eliminarDetalleRequisicion(request, id):
 def cancelarRequisicion(request, id):
     req = get_object_or_404(Requisicion, id=id)
     if(req.estado_id==4   or req.estado_id==3):
-      req.estado_id = 5
+      req.estado_id = 6
       req.save()
       messages.success(request, 'Requisición ha sido cancelada  correctamente.', extra_tags='success')
     else:
@@ -128,6 +128,53 @@ def cambioDeEstadoRequisicion(request, id, estado):
      ob=   request.GET["observacion"]
      obre =RequisicionObservacion(requisicion_id=id, observacion=ob, fecha= datetime.today().strftime('%Y-%m-%d')  )
      obre.save()
+    
+    if estado == 5:
+         messages.success(request, 'Requisición ha sido modificada correctamente.', extra_tags='success')
+         return HttpResponseRedirect('/requisiciones')
+    else:
+         messages.success(request, 'Requisición ha sido evaluada correctamente.', extra_tags='success')
+         return HttpResponseRedirect('/requisiciones/pendientes')
 
-    messages.success(request, 'Requisición ha sido evaluada correctamente.', extra_tags='success')
-    return HttpResponseRedirect('/requisiciones/pendientes')
+
+def requisicionEditar(request, id ):
+    req=Requisicion.objects.get(pk=id)
+    estado=EstadoRequisicion.objects.get(pk=req.estado_id)
+    nivel=NivelRequisicion.objects.get(pk=req.nivel_id)
+    productos = Producto.objects.all()
+    jefe=User.objects.get(pk=req.jefe_id)
+
+    queryOb = "select * from req_observaciones where requisicion_id = "+str(req.id);
+    observaciones=RequisicionObservacion.objects.raw(queryOb)
+    
+
+    sql = "SELECT rrp.cantidad ,rrp.id, rrp.producto_id , rrp.requisicion_id , pp.nombre, pp.url_imagen_producto, pp.caracteristica FROM req_requisicion_producto rrp  INNER JOIN pro_producto pp ON rrp.producto_id  = pp.id where rrp.requisicion_id ="+str(id)+";";
+    detalles= RequisicionProducto.objects.raw(sql)
+    context ={'req': req, 'estado': estado,'nivel':nivel,'jefe': jefe, 'productos': productos,'id': id, "detalles": detalles, "observaciones": observaciones}
+    return render(request, 'requisiciones/requisiciones-modificar.html', context)
+
+
+
+def requisicionesFinalizadasPorUnJefe(request):
+    query = 'select rr.id, rr.nivel_id, rr.jefe_id, rr.fecha_requisicion , rr.fecha_estimada , rr.usuario_id , rr.estado_id , rn.nivel, re.estado    from req_requisicion rr inner join req_nivel rn on rr.nivel_id  = rn.id inner join req_estado re  on rr.estado_id  = re.id where re.id=2 or re.id=1' 
+    obj=Requisicion.objects.raw(query) #modificar a razon que aparezcan las requisiciones que se aprueban por un jefe.
+    context ={'requisiciones':obj}
+    return render(request, 'requisiciones/requisiciones-finalizadas-por-jefe.html', context)
+
+
+def requisicionVer(request, id ):
+    req=Requisicion.objects.get(pk=id)
+    estado=EstadoRequisicion.objects.get(pk=req.estado_id)
+    nivel=NivelRequisicion.objects.get(pk=req.nivel_id)
+    productos = Producto.objects.all()
+    jefe=User.objects.get(pk=req.jefe_id)
+
+    queryOb = "select * from req_observaciones where requisicion_id = "+str(req.id);
+    observaciones=RequisicionObservacion.objects.raw(queryOb)
+    
+    
+
+    sql = "SELECT rrp.cantidad ,rrp.id, rrp.producto_id , rrp.requisicion_id , pp.nombre, pp.url_imagen_producto, pp.caracteristica FROM req_requisicion_producto rrp  INNER JOIN pro_producto pp ON rrp.producto_id  = pp.id where rrp.requisicion_id ="+str(id)+";";
+    detalles= RequisicionProducto.objects.raw(sql)
+    context ={'req': req, 'estado': estado,'nivel':nivel,'jefe': jefe, 'productos': productos,'id': id, "detalles": detalles, "observaciones": observaciones}
+    return render(request, 'requisiciones/requisicion-ver.html', context)

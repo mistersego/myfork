@@ -12,7 +12,7 @@
                       <li class="breadcrumb-item">
                           <a href="{% url 'requisiciones' %}">Requisiciones</a>
                       </li>
-                      <li class="breadcrumb-item active">Agregar requisición</li>
+                      <li class="breadcrumb-item active">Editar requisición Nº {{req.id}}</li>
                   </ol>
               </div>
           </div>
@@ -31,6 +31,13 @@
             <li class="list-group-item">NIVEL: {{nivel.nivel}}</li>
             <li class="list-group-item">JEFE ASIGNADO: {{jefe.first_name}} {{jefe.last_name}}</li>
           </ul>
+
+          <hr>
+          <h4>Observaciones</h4>
+          {% for ob in observaciones %}
+          <li class="list-group-item">{{ob.fecha}}: {{ob.observacion}}</li> 
+          <br>
+          {% endfor %}
         </div>
       </div>
      <div class="col-md-12">
@@ -95,7 +102,7 @@
         </table>
         <br>
 
-        <a href="{%url 'requisiciones'%}" class="btn btn-success">FINALIZAR</a>
+        <a href="{% url 'requisicion-evaluar-final' id=req.id estado=5 %}" class="btn btn-success">FINALIZAR</a>
 
 
 

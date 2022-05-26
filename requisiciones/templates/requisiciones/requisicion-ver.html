@@ -10,9 +10,9 @@
               <div class="page-title">
                   <ol class="breadcrumb">
                       <li class="breadcrumb-item">
-                          <a href="{% url 'requisiciones-por-aprobar' %}">Requisiciones por aprobar</a>
+                          <a href="{% url 'requisiciones' %}">Requisiciones</a>
                       </li>
-                      <li class="breadcrumb-item active">Aprobar requisición</li>
+                      <li class="breadcrumb-item active">Ver requisición</li>
                   </ol>
               </div>
           </div>
@@ -66,7 +66,7 @@
                     <td>{{detalle.nombre}} -{{detalle.caracteristica}} </td>
                     <td>{{detalle.cantidad}}</td>
                     {% if detalle.url_imagen_producto %}
-                    <td scope="row"><img src="../../../media/{{detalle.url_imagen_producto}}" style="height: 50px; width: 50px;" alt="..."></td>
+                    <td scope="row"><img src="../../../../media/{{detalle.url_imagen_producto}}" style="height: 50px; width: 50px;" alt="..."></td>
                     {% else %}
                     <td scope="row" ><img src="" style="height: 50px; width: 50px;" alt="no imagen"></td>
                     {% endif %}
@@ -77,14 +77,7 @@
               </table>
               <br>
       
-              <a href="{% url 'requisicion-evaluar-final' id=req.id estado=1 %}" class="btn btn-success">FINALIZAR</a>
-              <a href="{% url 'requisicion-evaluar-final' id=req.id estado=2 %}" class="btn btn-danger">RECHAZAR</a>
-              <hr>
-              <form action="{% url 'requisicion-evaluar-final' id=req.id estado=3 %}">
-                <label for="">Observación</label>
-                <textarea name="observacion" class="form-control"  cols="50" ></textarea>
-                <BUTTON class="btn btn-warning" type="submit">FINALIZAR CON OBSERVACIONES</BUTTON>
-              </form>
+            
             
               
       

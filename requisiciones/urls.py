@@ -11,7 +11,9 @@ urlpatterns = [
     path('requisiciones/cancelar/<int:id>/',views.cancelarRequisicion, name = "requisiciones-cancelar"),
     path('requisiciones/evaluar/<int:id>/',views.evaluarRequisicion, name = "requisicion-evaluar"),
     path('requisiciones/evaluar/final/<int:id>/<int:estado>',views.cambioDeEstadoRequisicion, name = "requisicion-evaluar-final"),
-
+    path('requisiciones/editar/<int:id>/',views.requisicionEditar, name = "requisicion-editar"),
+    path('requisiciones/finalizadas',views.requisicionesFinalizadasPorUnJefe, name = "requisiciones-finalizadas-por-jefe"),
+    path('requisiciones/requisicion/ver/<int:id>/',views.requisicionVer, name = "requisicion-ver"),
     
     #path('areas/save',views.guardarArea,name = "guardar-area"),
     # path('areas/cambioestado/<int:id>/',views.cambioEstadoArea, name="area-habilitado"),

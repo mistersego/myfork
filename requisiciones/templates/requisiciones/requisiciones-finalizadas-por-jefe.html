@@ -11,7 +11,7 @@
                         <li class="breadcrumb-item">
                             <a href="/">Home</a>
                         </li>
-                        <li class="breadcrumb-item active">Requisiciones por aprobar</li>
+                        <li class="breadcrumb-item active">Requisiciones aprobadas por mi</li>
                     </ol>
                 </div>
             </div>
@@ -27,7 +27,7 @@
       <div class="col-md-12">
         <div class="card">
     				<div class="">
-    			  	<h5 class="card-title mb-4"><strong>Requisiciones por aprobar asignadas a mi</strong></h5>
+    			  	<h5 class="card-title mb-4"><strong>Requisiciones aprobadas por mi</strong></h5>
     				</div>
     				<div class="card-body">
               <table class="table" id="myTable">
@@ -39,7 +39,7 @@
                     <th  scope="col">Fecha de estimada</th>
                     <th  scope="col">Nivel</th>
                     <th  scope="col">Estado</th>
-                    <th class="text-center" width="60">revisar</th>
+                    <th class="text-center" width="60">ver</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -52,7 +52,7 @@
                     <td> {{req.nivel}}</td>
                     <td> {{req.estado}}</td>
 
-                    <td class="text-center"><a href="{% url 'requisicion-evaluar' id=req.id %}" class="btn btn-success"><i class="fas fa-eye"></i></a> </td>
+                    <td class="text-center"><a href="{% url 'requisicion-ver' id=req.id %}" class="btn btn-success"><i class="fas fa-eye"></i></a> </td>
                   </tr>
                   {% endfor %}
                 </tbody>

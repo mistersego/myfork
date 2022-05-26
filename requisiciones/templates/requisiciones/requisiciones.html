@@ -62,9 +62,13 @@
                     <td> {{req.fecha_estimada}}</td>
                     <td> {{req.nivel}}</td>
                     <td> {{req.estado}}</td>
-                    <td class="text-center"><a href="{% url 'rubro' id=req.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a> </td>
+                    {% if  req.estado_id == 4 or req.estado_id == 3 or req.estado_id == 5 %}
+                    <td class="text-center"><a href="{% url 'requisicion-editar' id=req.id %}" class="btn btn-warning"><i class="fas fa-edit"></i></a> </td>
+                    {% else %}
+                    <td class="text-center"><a href="{% url 'requisicion-ver' id=req.id %}" class="btn btn-secondary"><i class="fas fa-eye"></i></a> </td>
+                    {% endif %}
 
-                    {% if  req.estado_id == "4" or req.estado_id == "3" %}
+                    {% if  req.estado_id == 4 or req.estado_id == 3 or req.estado_id == 5 %}
                      <td class="text-center"><a href="{% url 'requisiciones-cancelar' id=req.id %}" class="btn btn-danger"><i class="fas fa-trash"></i></a> </td>
                     {% else %}
                       <td class="text-center"> <button class="btn btn-danger" disabled ><i class="fas fa-trash"></i></button> </td>
